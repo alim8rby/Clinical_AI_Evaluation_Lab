@@ -1,10 +1,17 @@
 # Roadmap
 
 ## V0 — Architecture
-- Product specification
-- Repository skeleton
-- Data model
-- API/module contracts
+
+V0 is frozen as six sequential steps:
+
+1. Repository Architecture
+2. Core Data Model
+3. Module Contracts
+4. API Contract
+5. Configuration & Environment
+6. V0 Audit & Freeze
+
+V0 defines the product boundary and technical contracts only. It does not implement the application.
 
 ## V1 — Working RAG
 - Document ingestion
