@@ -8,9 +8,9 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V2 — Evaluation Lab: FROZEN**
+**V3 — Failure Observatory: FROZEN**
 
-V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline plus a deterministic evaluation layer.
+V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
 ### What is built
 
@@ -66,16 +66,18 @@ The audit repaired the benchmark evidence documentation and added failure retent
 
 See docs/methodology/v2-audit.md for the freeze record and limitations.
 
-## What comes next
+## V3 — Failure Observatory
 
-### V3 — Failure Observatory — NEXT
+- Deterministic failure classification and severity
+- Local structured failure persistence
+- Failure analysis and filtering
+- Known-failure regression suite
+- Failure Observatory query layer and local UI
+- End-to-end V2 evaluation → failure workflow
 
-- Failure classification and persistence
-- Failure analysis workflows
-- Failure Observatory UI
-- Regression testing around known failures
+See docs/methodology/v3-audit.md for the V3 freeze record.
 
-### V4 — Productionization — PLANNED
+### V4 — Productionization — NEXT
 
 - FastAPI
 - PostgreSQL + pgvector
@@ -98,7 +100,7 @@ See docs/methodology/v2-audit.md for the freeze record and limitations.
 - Controlled corpus is compact.
 - Answer and grounding evaluation use token-overlap baselines.
 - Reliability signals are heuristic.
-- No production persistence or UI exists yet.
+- V3 persistence and UI are local only; production persistence and API infrastructure are deferred to V4.
 - No real patient data or autonomous clinical decision-making.
 - Local RAG still uses deterministic hashed-token embeddings and a mock generation provider.
 - No clinical validation is claimed.
@@ -112,6 +114,7 @@ See docs/methodology/v2-audit.md for the freeze record and limitations.
 - docs/architecture/ — architecture and contracts
 - docs/methodology/ — implementation methodology and audits
 - docs/methodology/v2-audit.md — V2 freeze record
+- docs/methodology/v3-audit.md — V3 freeze record
 
 ## Tech direction
 
