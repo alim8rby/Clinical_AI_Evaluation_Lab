@@ -21,10 +21,6 @@ class DeploymentConfigTests(unittest.TestCase):
         self.assertIn("schema_migrations", content)
         self.assertIn("WHERE version = :version", content)
 
-
-if __name__ == "__main__":
-    unittest.main()
-
     def test_ci_workflow_exists(self):
         content = (self.ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
         self.assertIn("python -m unittest discover", content)
@@ -36,3 +32,7 @@ if __name__ == "__main__":
         self.assertIn("ghcr.io/", content)
         self.assertIn("github.sha", content)
         self.assertIn("GITHUB_TOKEN", content)
+
+
+if __name__ == "__main__":
+    unittest.main()
