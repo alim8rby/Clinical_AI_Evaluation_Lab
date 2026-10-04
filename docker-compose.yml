@@ -1,2 +1,45 @@
 services:
-  # Infrastructure services will be added during productionization.
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: caiel
+      POSTGRES_USER: caiel
+      POSTGRES_PASSWORD: caiel
+    ports:
+      - "5432:5432"
+    volumes:
+      - caiel_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U caiel -d caiel"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      APP_HOST: 0.0.0.0
+      APP_PORT: 8000
+      LOG_LEVEL: INFO
+      DATABASE_URL: postgresql+psycopg://caiel:caiel@db:5432/caiel
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_GENERATION_MODEL: llama3.2:3b
+      OLLAMA_EMBEDDING_MODEL: nomic-embed-text
+      OLLAMA_TIMEOUT_SECONDS: 60
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/readiness', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  caiel_postgres:
