@@ -28,6 +28,8 @@ Completed: FastAPI implementation, PostgreSQL and pgvector, structured persisten
 
 See `docs/roadmap-v5.md`.
 
-Current phase: **V5.2 — Benchmark v2 — IN PROGRESS**.
+Current phase: **V5.2 — Benchmark v2 — FROZEN**.
+
+V5.3 is next: the retrieval research layer.
 
 V5.1 engineering is frozen; human calibration labels remain optional and pending.
