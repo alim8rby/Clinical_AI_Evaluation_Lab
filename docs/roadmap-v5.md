@@ -20,10 +20,17 @@ V5 upgrades CAIEL from a productionized clinical RAG demo into a stronger evalua
 - Coverage audit and versioning policy
 - V5.2 audit and freeze
 
-## V5.3 — Retrieval Research Layer — PLANNED
-- Dense, BM25, and hybrid retrieval comparisons
-- Optional reranking experiments
-- Retrieval metrics and latency comparison
+## V5.3 — Retrieval Research Layer — ENGINEERING COMPLETE
+- Dense retrieval research baseline
+- Deterministic BM25 retrieval
+- Hybrid dense + BM25 retrieval
+- Shared benchmark-facing evaluation contract
+- Precision@K, Recall@K, MRR, nDCG, and latency comparison
+- Cross-strategy comparison report
+- V4 production retrieval path unchanged
+- Methodology and limitations documented
+
+Empirical benchmark runs remain environment-dependent and should not be represented as completed results until executed.
 
 ## V5.4 — Generation Evaluation Layer — PLANNED
 - Controlled multi-model experiments
