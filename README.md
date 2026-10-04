@@ -8,7 +8,7 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V4.15 — V4 Hardening: COMPLETE AND FROZEN**
+**V5.1 — Evaluation Calibration: ENGINEERING COMPLETE**
 
 V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
@@ -79,21 +79,20 @@ See docs/methodology/v3-audit.md for the V3 freeze record.
 
 ### V4 — Productionization
 
-V4.0–V4.10 productionization is frozen; V4.11–V4.12 hardening is also frozen. The application has a FastAPI boundary, PostgreSQL persistence, pgvector retrieval, Ollama provider integration, evaluation/failure runtime, observability, an API-backed frontend, containers, and CI/CD.
+V4.0–V4.15 is frozen. The application has a FastAPI boundary, PostgreSQL persistence, pgvector retrieval, Ollama provider integration, semantic evaluation, failure analysis, observability, an API-backed frontend, containers, and CI/CD.
 
-### V5 — Healthcare interoperability — PLANNED
+### V5 — Evaluation Platform
 
-- FHIR
-- Provenance
-- Structured clinical data
-- Human-in-the-loop workflows
+V5.1 adds a human-calibration framework for the semantic evaluator. Human-reviewed labels are intentionally pending; no evaluator agreement claim is made without them.
+
+See docs/methodology/v5.1-calibration.md and docs/methodology/v5.1-audit.md.
 
 ## Important limitations
 
-- Benchmark has only eight questions.
+- ClinicalQA-v1 has 40 questions and remains a compact benchmark.
 - Controlled corpus is compact.
-- Answer and grounding evaluation use token-overlap baselines.
-- Reliability signals are heuristic.
+- Lexical metrics remain as deterministic baselines alongside semantic evaluation.
+- Human calibration labels are not yet populated.
 - V4 uses a compact depression benchmark and has no hosted cloud deployment yet.
 - No real patient data or autonomous clinical decision-making.
 - The PostgreSQL runtime now uses Ollama semantic embeddings; the deterministic 256-dimensional provider remains available as a compatibility baseline.
@@ -113,6 +112,8 @@ V4.0–V4.10 productionization is frozen; V4.11–V4.12 hardening is also frozen
 - docs/methodology/v4.11-semantic-embeddings.md — semantic embedding hardening
 - docs/methodology/v4.12-semantic-evaluation.md — semantic evaluation hardening
 - docs/methodology/v4.15-failure-classifier.md — failure classifier hardening
+- docs/methodology/v5.1-calibration.md — evaluator calibration
+- docs/methodology/v5.1-audit.md — V5.1 freeze record
 
 ## Tech direction
 
