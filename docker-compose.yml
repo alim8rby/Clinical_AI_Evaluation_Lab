@@ -2,15 +2,15 @@ services:
   db:
     image: pgvector/pgvector:pg16
     environment:
-      POSTGRES_DB: caiel
-      POSTGRES_USER: caiel
-      POSTGRES_PASSWORD: caiel
+      POSTGRES_DB: ${POSTGRES_DB:-caiel}
+      POSTGRES_USER: ${POSTGRES_USER:-caiel}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
     ports:
       - "5432:5432"
     volumes:
       - caiel_postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U caiel -d caiel"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-caiel} -d ${POSTGRES_DB:-caiel}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -25,7 +25,7 @@ services:
       APP_HOST: 0.0.0.0
       APP_PORT: 8000
       LOG_LEVEL: INFO
-      DATABASE_URL: postgresql+psycopg://caiel:caiel@db:5432/caiel
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-caiel}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@db:5432/${POSTGRES_DB:-caiel}
       OLLAMA_BASE_URL: http://host.docker.internal:11434
       OLLAMA_GENERATION_MODEL: llama3.2:3b
       OLLAMA_EMBEDDING_MODEL: nomic-embed-text
