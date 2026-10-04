@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.backend.database import DATABASE_URL, SessionLocal
 from app.backend.runtime import EvaluationRuntime
+from src.evaluation.ollama_semantic import OllamaSemanticEvaluator
 from app.backend.repositories import ChunkEmbeddingRepository, ChunkRepository, DocumentRepository
 from src.failure_analysis import FailureObservatory, FailureQuery
 from src.generation import OllamaGenerationProvider, build_citations
@@ -23,10 +24,10 @@ from src.retrieval import (
 class DatabaseClinicalRAG:
     """Infrastructure adapter that keeps the V1 RAG result contract over PostgreSQL retrieval."""
 
-    def __init__(self, session_factory, generator):
+    def __init__(self, session_factory, generator, embedder):
         self.session_factory = session_factory
         self.generator = generator
-        self.embedder = LocalHashedEmbeddingProvider(dimensions=256)
+        self.embedder = embedder
 
     def ingest(self, document: SourceDocument, *, max_chars: int = 1200):
         chunks = chunk_document(document, max_chars=max_chars)
@@ -103,8 +104,9 @@ class ApiServices:
         except Exception:
             return False
 
-    def __init__(self, rag=None):
+    def __init__(self, rag=None, semantic_evaluator=None):
         self.rag = rag
+        self.semantic_evaluator = semantic_evaluator
         self._failure_observatory = None
 
     def session(self) -> Session:
@@ -113,7 +115,7 @@ class ApiServices:
     def runtime(self, session: Session) -> EvaluationRuntime:
         if self.rag is None:
             raise RuntimeError("QA service is not configured")
-        return EvaluationRuntime(session, self.rag)
+        return EvaluationRuntime(session, self.rag, self.semantic_evaluator)
 
     @property
     def observatory(self):
@@ -164,4 +166,4 @@ def build_default_rag():
     return rag
 
 
-services = ApiServices(build_default_rag())
+services = ApiServices(build_default_rag(), OllamaSemanticEvaluator())
