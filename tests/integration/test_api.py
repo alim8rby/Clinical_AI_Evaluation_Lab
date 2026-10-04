@@ -11,13 +11,10 @@ class ApiFoundationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"status":"ok","environment":"development","version":"0.4.0"})
 
-    def test_invalid_request_error_contract(self):
-        @app.get("/api/v1/test-invalid-request")
-        def invalid_request():
-            raise ValueError("example validation error")
-        response = self.client.get("/api/v1/test-invalid-request")
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], {"code":"INVALID_REQUEST","message":"example validation error","details":{}})
+    def test_not_found_error_contract(self):
+        response = self.client.get("/api/v1/experiments/missing")
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["error"], {"code":"NOT_FOUND","message":"experiment not found","details":{}})
 
 if __name__ == "__main__":
     unittest.main()
