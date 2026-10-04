@@ -77,7 +77,7 @@ class FailureAnalysisTests(unittest.TestCase):
         self.assertEqual(summary.by_category, {"GENERATION": 2, "RETRIEVAL": 1})
         self.assertEqual(
             summary.by_type,
-            {"Hallucination": 1, "Missing uncertainty": 1, "Hallucination": 1},
+            {"Hallucination": 2, "Missing uncertainty": 1},
         )
 
     def test_store_analysis_uses_persisted_records(self):
