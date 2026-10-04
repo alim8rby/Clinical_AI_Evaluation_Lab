@@ -7,10 +7,13 @@ from src.experiments.models import ExperimentResult
 from src.failure_analysis.models import Failure
 from src.failure_analysis.severity import assign_severity
 
-CLASSIFIER_VERSION = "failure-v1"
+CLASSIFIER_VERSION = "failure-v2"
 UNSUPPORTED_CLAIM_THRESHOLD = 0.5
 CITATION_VALIDITY_THRESHOLD = 1.0
 RECALL_FAILURE_THRESHOLD = 0.0
+SEMANTIC_UNSUPPORTED_THRESHOLD = 0.5
+SEMANTIC_CORRECTNESS_THRESHOLD = 0.5
+SEMANTIC_COMPLETENESS_THRESHOLD = 0.5
 
 
 def _metric(result, name):
@@ -51,6 +54,18 @@ def classify_failures(question: BenchmarkQuestion, result: ExperimentResult, *, 
         failures.append(_make_failure(run, question.question_id, "RETRIEVAL", "Missing evidence",
             "Expected benchmark evidence was not retrieved.", f"Recall@K={recall:.4f}", "recall_at_k", recall, created_at))
 
+    recall = _metric(result.retrieval, "recall_at_k")
+    if (
+        recall is not None
+        and recall > RECALL_FAILURE_THRESHOLD
+        and recall < 1.0
+        and _metric(result.retrieval, "expected_count") is not None
+        and _metric(result.retrieval, "expected_count") > 1
+    ):
+        failures.append(_make_failure(run, question.question_id, "RETRIEVAL", "Ranking failure",
+            "Some expected benchmark evidence was retrieved, but the complete expected evidence set was not recovered.",
+            f"Recall@K={recall:.4f}", "recall_at_k", recall, created_at))
+
     citation_validity = _metric(result.grounding, "citation_validity")
     if citation_validity is not None and citation_validity < CITATION_VALIDITY_THRESHOLD:
         failures.append(_make_failure(run, question.question_id, "CITATION", "Wrong citation",
@@ -58,10 +73,23 @@ def classify_failures(question: BenchmarkQuestion, result: ExperimentResult, *, 
             "citation_validity", citation_validity, created_at))
 
     unsupported = _metric(result.grounding, "unsupported_claim_rate")
-    if unsupported is not None and unsupported > UNSUPPORTED_CLAIM_THRESHOLD:
+    semantic_unsupported = _metric(result.grounding, "semantic_unsupported_claim_rate")
+    effective_unsupported = semantic_unsupported if semantic_unsupported is not None else unsupported
+    if effective_unsupported is not None and effective_unsupported > UNSUPPORTED_CLAIM_THRESHOLD:
         failures.append(_make_failure(run, question.question_id, "GENERATION", "Hallucination",
-            "A substantial share of answer claims lacks evidence support.", f"Unsupported claim rate={unsupported:.4f}",
-            "unsupported_claim_rate", unsupported, created_at))
+            "A substantial share of answer claims lacks evidence support.", f"Unsupported claim rate={effective_unsupported:.4f}",
+            "semantic_unsupported_claim_rate" if semantic_unsupported is not None else "unsupported_claim_rate", effective_unsupported, created_at))
+
+    semantic_correctness = _metric(result.answer, "semantic_correctness")
+    semantic_completeness = _metric(result.answer, "semantic_completeness")
+    if semantic_correctness is not None and semantic_correctness < SEMANTIC_CORRECTNESS_THRESHOLD:
+        failures.append(_make_failure(run, question.question_id, "GENERATION", "Incorrect interpretation",
+            "The semantic evaluator scored the answer below the correctness threshold.",
+            f"Semantic correctness={semantic_correctness:.4f}", "semantic_correctness", semantic_correctness, created_at))
+    if semantic_completeness is not None and semantic_completeness < SEMANTIC_COMPLETENESS_THRESHOLD:
+        failures.append(_make_failure(run, question.question_id, "GENERATION", "Incomplete answer",
+            "The semantic evaluator scored the answer below the completeness threshold.",
+            f"Semantic completeness={semantic_completeness:.4f}", "semantic_completeness", semantic_completeness, created_at))
 
     critical_error = _metric(result.reliability, "critical_error_rate")
     if critical_error is not None and critical_error > 0:
