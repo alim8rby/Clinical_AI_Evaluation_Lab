@@ -5,6 +5,7 @@ from pathlib import Path
 from src.evaluation.benchmark_v2 import validate_benchmark_v2_payload
 from src.evaluation.retrieval_research import (
     build_research_retrievers,
+    compare_retrieval_strategies,
     evaluate_retrieval_strategy,
     summarize_retrieval_results,
 )
@@ -66,3 +67,14 @@ class RetrievalResearchTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    def test_comparison_report_contains_all_strategies(self):
+        report = compare_retrieval_strategies(
+            self.questions[:3],
+            build_research_retrievers(self.chunks),
+            benchmark_version="ClinicalQA-v2",
+            top_k=5,
+        )
+        self.assertEqual(report.benchmark_version, "ClinicalQA-v2")
+        self.assertEqual(report.top_k, 5)
+        self.assertEqual({item.strategy for item in report.summaries}, {"bm25", "dense", "hybrid"})
