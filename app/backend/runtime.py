@@ -8,7 +8,6 @@ import json
 from src.evaluation.answer import evaluate_question_answer
 from src.evaluation.grounding import evaluate_answer_grounding
 from src.evaluation.reliability import evaluate_answer_reliability
-from src.evaluation.ollama_semantic import OllamaSemanticEvaluator
 from src.evaluation.retrieval import evaluate_question_retrieval
 from src.evaluation.benchmark import BenchmarkQuestion
 from src.experiments.models import Experiment, ExperimentResult, RunRecord
