@@ -8,6 +8,9 @@ class AnswerMetrics:
     correctness: float
     completeness: float
     relevance: float
+    semantic_correctness: float | None = None
+    semantic_completeness: float | None = None
+    semantic_relevance: float | None = None
 
 
 def _tokens(text: str) -> set[str]:
