@@ -78,8 +78,12 @@ class FailureStore:
         if not self.path.is_file():
             raise FailureStoreError(f"store path is not a file: {self.path}")
 
+        raw = self.path.read_text(encoding="utf-8")
+        if not raw.strip():
+            return []
+
         try:
-            payload = json.loads(self.path.read_text(encoding="utf-8"))
+            payload = json.loads(raw)
         except json.JSONDecodeError as exc:
             raise FailureStoreError(f"invalid failure store JSON: {self.path}") from exc
 
