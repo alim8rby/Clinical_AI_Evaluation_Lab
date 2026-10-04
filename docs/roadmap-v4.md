@@ -14,11 +14,12 @@ Production API, persistence, pgvector retrieval, provider integration, evaluatio
 - controlled-corpus re-indexing path
 - deterministic hashed baseline retained
 
-### V4.12 — Semantic Answer & Grounding Evaluation — NEXT
+### V4.12 — Semantic Answer & Grounding Evaluation — COMPLETE AND FROZEN
 - model-assisted semantic evaluation behind provider boundaries
 - deterministic lexical metrics retained as baselines
-- evaluator version/configuration recorded
-- calibration and regression coverage
+- evaluator version recorded
+- integration and regression coverage
+- human calibration remains a later hardening step
 
 ### V4.13 — Benchmark Expansion — PLANNED
 ### V4.14 — Retrieval & Evaluation Challenge Set — PLANNED
