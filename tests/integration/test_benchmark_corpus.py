@@ -29,5 +29,7 @@ class BenchmarkCorpusIntegrationTests(unittest.TestCase):
         questions = validate_benchmark_payload(benchmark_payload)
         assert_evidence_resolved(questions, chunk_ids)
 
-        self.assertEqual(len(questions), 8)
+        self.assertEqual(len(questions), 40)
+        self.assertEqual(len({q.question_id for q in questions}), 40)
+        self.assertEqual({q.difficulty for q in questions}, {"easy", "medium", "hard"})
         self.assertEqual(len(chunk_ids), 10)
