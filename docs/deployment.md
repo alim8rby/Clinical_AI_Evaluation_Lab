@@ -6,7 +6,7 @@ GitHub Actions runs on pushes and pull requests:
 
 1. Install Python dependencies.
 2. Compile Python sources.
-3. Run the repository unittest suite.
+3. Run the repository pytest suite.
 4. Run Ruff static analysis.
 5. Build the Docker image.
 
