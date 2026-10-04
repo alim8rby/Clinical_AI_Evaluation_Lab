@@ -1,1 +1,3 @@
-# Dependencies will be pinned during V1 implementation.
+fastapi
+uvicorn[standard]
+httpx
