@@ -14,6 +14,7 @@ from src.pipeline import ClinicalRAG, RAGResult
 from src.preprocessing import chunk_document
 from src.retrieval import (
     LocalHashedEmbeddingProvider,
+    OllamaEmbeddingProvider,
     PgVectorRetriever,
     VectorIndex,
 )
@@ -34,7 +35,7 @@ class DatabaseClinicalRAG:
             DocumentRepository(session).save(document)
             ChunkRepository(session).save_many(chunks)
             ChunkEmbeddingRepository(session).save_many(
-                chunks, [self.embedder.embed(chunk.text) for chunk in chunks]
+                chunks, [self.embedder.embed(chunk.text) for chunk in chunks], column="semantic_embedding"
             )
         finally:
             session.close()
@@ -43,7 +44,7 @@ class DatabaseClinicalRAG:
     def ask(self, question: str, *, top_k: int = 5, answer_id: str = "answer-1", prompt_version: str = "v1"):
         session = self.session_factory()
         try:
-            evidence = PgVectorRetriever(session, self.embedder).retrieve(question, top_k=top_k)
+            evidence = PgVectorRetriever(session, self.embedder, column="semantic_embedding").retrieve(question, top_k=top_k)
             answer = self.generator.generate(question, evidence, prompt_version=prompt_version)
             citations = build_citations(answer, evidence, answer_id=answer_id)
             return RAGResult(
@@ -154,7 +155,7 @@ def build_default_rag():
 
     generator = OllamaGenerationProvider()
     if DATABASE_URL.startswith(("postgresql://", "postgresql+psycopg://")):
-        rag = DatabaseClinicalRAG(SessionLocal, generator)
+        rag = DatabaseClinicalRAG(SessionLocal, generator, OllamaEmbeddingProvider())
     else:
         rag = ClinicalRAG(VectorIndex("data/caiel-dev-index.json"), generator)
 
