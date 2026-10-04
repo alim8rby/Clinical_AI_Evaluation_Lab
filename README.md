@@ -38,9 +38,9 @@ Traceability: Question → Evidence → Answer → Claim → Citation → Chunk 
 
 - ClinicalQA-v1
 - Depression only
-- Current seed: 8 questions
+- Current benchmark: 40 questions
 - Controlled evidence mappings to stable chunk IDs
-- Planned growth: 30–50 questions, then 100–300
+- V5.2 target: expand coverage beyond the current compact benchmark
 
 ### Metrics
 
@@ -113,7 +113,9 @@ See docs/methodology/v5.1-calibration.md and docs/methodology/v5.1-audit.md.
 - docs/methodology/v4.12-semantic-evaluation.md — semantic evaluation hardening
 - docs/methodology/v4.15-failure-classifier.md — failure classifier hardening
 - docs/methodology/v5.1-calibration.md — evaluator calibration
+- docs/methodology/v5.1-annotation-rubric.md — human review rubric
 - docs/methodology/v5.1-audit.md — V5.1 freeze record
+- docs/roadmap-v5.md — V5 evaluation platform roadmap
 
 ## Tech direction
 
