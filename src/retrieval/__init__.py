@@ -3,6 +3,6 @@ from .search import Evidence, EvidenceSet, retrieve
 from .provider import EmbeddingProvider, LocalHashedEmbeddingProvider
 from .ollama import OllamaEmbeddingProvider
 
-__all__ = ["EmbeddedChunk", "VectorIndex", "embed_text", "Evidence", "EvidenceSet", "retrieve", "EmbeddingProvider", "LocalHashedEmbeddingProvider", "OllamaEmbeddingProvider"]
+__all__ = ["EmbeddedChunk", "VectorIndex", "embed_text", "Evidence", "EvidenceSet", "retrieve", "EmbeddingProvider", "LocalHashedEmbeddingProvider", "OllamaEmbeddingProvider", "PgVectorRetriever"]
 
 from .pgvector import PgVectorRetriever
