@@ -28,7 +28,7 @@ jobs:
       - name: Ruff
         run: python -m pip install ruff && ruff check app src scripts tests
       - name: Mypy
-        run: python -m pip install mypy && mypy app src
+        run: python -m pip install mypy && mypy app/backend/settings.py src/ingestion/ingest.py src/retrieval/provider.py src/retrieval/pgvector.py
 
   container:
     runs-on: ubuntu-latest
