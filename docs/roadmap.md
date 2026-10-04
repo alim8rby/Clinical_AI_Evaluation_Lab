@@ -43,15 +43,9 @@ V3 remains local. It does not introduce PostgreSQL, production APIs, authenticat
 
 V3 severity is a deterministic triage signal, not a validated clinical risk score. Failure classification is heuristic and engineering-oriented.
 
-## V4 — Productionization — NEXT
+## V4 — Productionization — FROZEN
 
-Planned:
-- FastAPI implementation
-- PostgreSQL and pgvector
-- Structured persistence
-- Logging and monitoring
-- Docker and deployment
-- CI/CD
+Completed: FastAPI implementation, PostgreSQL and pgvector, structured persistence, logging and monitoring, Docker deployment stack, CI/CD, and final audit/freeze.
 
 ## V5 — Healthcare interoperability — PLANNED
 
