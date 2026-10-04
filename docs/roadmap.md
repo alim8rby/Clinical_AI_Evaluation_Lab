@@ -24,15 +24,26 @@ Completed:
 
 V2 is a deterministic engineering evaluation baseline, not a clinically validated benchmark or safety classifier.
 
-## V3 — Failure Observatory — NEXT
+## V3 — Failure Observatory — FROZEN
 
-Planned:
-- Failure classification and persistence
-- Failure analysis workflows
-- Failure Observatory UI
-- Regression testing around known failures
+Completed:
+1. Failure architecture and scope
+2. Failure data model and serialization
+3. Deterministic classification
+4. Severity and triage rules
+5. Local structured persistence
+6. Failure analysis and filtering
+7. Regression suite for known failure conditions
+8. Observatory query/backend boundary
+9. Failure Observatory UI
+10. End-to-end failure workflow integration
+11. V3 audit and freeze
 
-## V4 — Productionization — PLANNED
+V3 remains local. It does not introduce PostgreSQL, production APIs, authentication, deployment infrastructure, or other V4 concerns.
+
+V3 severity is a deterministic triage signal, not a validated clinical risk score. Failure classification is heuristic and engineering-oriented.
+
+## V4 — Productionization — NEXT
 
 Planned:
 - FastAPI implementation
