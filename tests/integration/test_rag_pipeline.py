@@ -5,7 +5,7 @@ from src.generation.citations import CitationError
 from src.generation.models import Answer, Claim
 from src.ingestion import ingest_document
 from src.pipeline import ClinicalRAG
-from src.retrieval import EvidenceSet, VectorIndex
+from src.retrieval import VectorIndex
 
 
 def _document():
