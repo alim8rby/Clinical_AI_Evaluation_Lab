@@ -8,7 +8,7 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V4.10 — V4 Productionization: FROZEN**
+**V4.11 — V4 Hardening: COMPLETE AND FROZEN**
 
 V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
@@ -96,7 +96,7 @@ V4.0–V4.10 are complete and frozen. The application has a FastAPI boundary, Po
 - Reliability signals are heuristic.
 - V4 uses a compact depression benchmark and has no hosted cloud deployment yet.
 - No real patient data or autonomous clinical decision-making.
-- The PostgreSQL runtime uses the deterministic 256-dimensional embedding baseline; Ollama generation is the live provider.
+- The PostgreSQL runtime now uses Ollama semantic embeddings; the deterministic 256-dimensional provider remains available as a compatibility baseline.
 - No clinical validation is claimed.
 
 ## Documentation
@@ -109,7 +109,8 @@ V4.0–V4.10 are complete and frozen. The application has a FastAPI boundary, Po
 - docs/methodology/ — implementation methodology and audits
 - docs/methodology/v2-audit.md — V2 freeze record
 - docs/methodology/v3-audit.md — V3 freeze record
-- docs/methodology/v4.10-audit.md — final V4 freeze record
+- docs/methodology/v4.10-audit.md — V4 productionization freeze record
+- docs/methodology/v4.11-semantic-embeddings.md — semantic embedding hardening
 
 ## Tech direction
 
