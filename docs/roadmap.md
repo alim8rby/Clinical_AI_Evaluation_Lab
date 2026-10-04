@@ -28,4 +28,6 @@ Completed: FastAPI implementation, PostgreSQL and pgvector, structured persisten
 
 See `docs/roadmap-v5.md`.
 
-Current phase: **V5.1 — Evaluation Calibration — ENGINEERING COMPLETE; HUMAN LABELS PENDING**.
+Current phase: **V5.2 — Benchmark v2 — IN PROGRESS**.
+
+V5.1 engineering is frozen; human calibration labels remain optional and pending.
