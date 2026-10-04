@@ -6,16 +6,31 @@ ClinicalQA-v1 is the controlled benchmark for evaluating the V1 depression RAG s
 
 The initial seed contains eight questions across easy, medium, and hard difficulty. It is an engineering seed, not a validated or statistically representative clinical benchmark.
 
-## Evidence status
+## Evidence gate
 
-The seed questions currently use DEFERRED_TO_CONTROLLED_CORPUS as a temporary evidence marker. Expected evidence must resolve to chunks in the controlled knowledge base before the benchmark is used for retrieval scoring.
+Every expected evidence item must eventually resolve to a real chunk in the controlled knowledge base.
 
-V2.1 therefore has two gates:
+The validator exposes two states:
 
-1. Schema gate: benchmark structure is valid.
-2. Evidence gate: expected evidence resolves to controlled chunks.
+- **Schema-valid:** question structure and values are valid.
+- **Evaluation-ready:** every expected evidence ID resolves to an available controlled chunk.
 
-Only the second gate makes a question ready for retrieval evaluation.
+The current seed intentionally uses DEFERRED_TO_CONTROLLED_CORPUS because V1 does not yet contain a frozen clinical corpus. This marker is always treated as unresolved.
+
+Retrieval metrics must not run against unresolved questions.
+
+## Evidence mapping rule
+
+Expected evidence should contain stable chunk_id values produced by the V1 preprocessing pipeline. Do not store free-text excerpts as the canonical identifier.
+
+When the controlled corpus is frozen:
+
+1. ingest authoritative documents;
+2. preprocess them into chunks;
+3. freeze the resulting chunk IDs;
+4. map each benchmark question to one or more supporting chunk IDs;
+5. run the evidence gate;
+6. only then use the benchmark for retrieval evaluation.
 
 ## Growth plan
 

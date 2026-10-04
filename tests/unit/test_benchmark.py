@@ -1,6 +1,11 @@
 import unittest
 
-from src.evaluation.benchmark import BenchmarkValidationError, validate_benchmark_payload
+from src.evaluation.benchmark import (
+    BenchmarkValidationError,
+    assert_evidence_resolved,
+    unresolved_evidence,
+    validate_benchmark_payload,
+)
 
 VALID = [{
     "question_id": "cq-001",
@@ -34,3 +39,18 @@ class BenchmarkTests(unittest.TestCase):
     def test_rejects_empty_evidence(self):
         with self.assertRaises(BenchmarkValidationError):
             validate_benchmark_payload([dict(VALID[0], expected_evidence=[])])
+
+    def test_evidence_resolves(self):
+        questions = validate_benchmark_payload(VALID)
+        self.assertEqual(unresolved_evidence(questions, {"chunk-001"}), {})
+        assert_evidence_resolved(questions, {"chunk-001"})
+
+    def test_evidence_gate_rejects_missing_chunk(self):
+        questions = validate_benchmark_payload(VALID)
+        with self.assertRaises(BenchmarkValidationError):
+            assert_evidence_resolved(questions, set())
+
+    def test_deferred_marker_is_unresolved(self):
+        payload = [dict(VALID[0], expected_evidence=["DEFERRED_TO_CONTROLLED_CORPUS"])]
+        questions = validate_benchmark_payload(payload)
+        self.assertIn("cq-001", unresolved_evidence(questions, {"chunk-001"}))

@@ -6,6 +6,7 @@ REQUIRED_FIELDS = frozenset({
     "question_id", "question", "domain", "difficulty",
     "expected_evidence", "reference_answer", "key_concepts",
 })
+DEFERRED_EVIDENCE_MARKER = "DEFERRED_TO_CONTROLLED_CORPUS"
 
 class BenchmarkValidationError(ValueError):
     """Raised when a benchmark question is invalid."""
@@ -64,3 +65,29 @@ def validate_benchmark_payload(payload: object) -> list[BenchmarkQuestion]:
     if not questions:
         raise BenchmarkValidationError("benchmark must not be empty")
     return questions
+
+def unresolved_evidence(
+    questions: list[BenchmarkQuestion],
+    available_chunk_ids: set[str],
+) -> dict[str, list[str]]:
+    """Return question IDs whose expected evidence is not in the controlled corpus."""
+    unresolved = {}
+    for question in questions:
+        missing = [
+            chunk_id for chunk_id in question.expected_evidence
+            if chunk_id == DEFERRED_EVIDENCE_MARKER or chunk_id not in available_chunk_ids
+        ]
+        if missing:
+            unresolved[question.question_id] = missing
+    return unresolved
+
+def assert_evidence_resolved(
+    questions: list[BenchmarkQuestion],
+    available_chunk_ids: set[str],
+) -> None:
+    """Raise until every benchmark question resolves to controlled chunks."""
+    unresolved = unresolved_evidence(questions, available_chunk_ids)
+    if unresolved:
+        raise BenchmarkValidationError(
+            f"unresolved expected evidence: {unresolved}"
+        )
