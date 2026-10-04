@@ -22,7 +22,8 @@ class ApiV41Tests(unittest.TestCase):
 
     def tearDown(self):
         import os
-        services.rag = None\n        os.unlink(self.tmp.name)
+        services.rag = None
+        os.unlink(self.tmp.name)
 
     def _failure(self):
         return Failure(
