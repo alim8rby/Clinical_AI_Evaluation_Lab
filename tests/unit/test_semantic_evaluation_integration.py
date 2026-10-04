@@ -4,7 +4,6 @@ from unittest.mock import Mock
 from src.evaluation.answer import evaluate_question_answer
 from src.evaluation.grounding import evaluate_answer_grounding
 from src.evaluation.benchmark import BenchmarkQuestion
-from src.evaluation.grounding_metrics import GroundingMetrics
 from src.generation.citations import Citation
 from src.generation.models import Answer, Claim
 from src.retrieval.search import Evidence, EvidenceSet
