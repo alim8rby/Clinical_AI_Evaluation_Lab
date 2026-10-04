@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.backend.database import DATABASE_URL, SessionLocal
 from app.backend.runtime import EvaluationRuntime
 from app.backend.repositories import ChunkEmbeddingRepository, ChunkRepository, DocumentRepository
-from src.failure_analysis import FailureObservatory
+from src.failure_analysis import FailureObservatory, FailureQuery
 from src.generation import OllamaGenerationProvider, build_citations
 from src.ingestion.models import SourceDocument
 from src.pipeline import ClinicalRAG, RAGResult
@@ -58,6 +58,34 @@ class DatabaseClinicalRAG:
             session.close()
 
 
+class DatabaseFailureObservatory:
+    """Request-scoped adapter that prevents a long-lived database session."""
+
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
+
+    def _run(self, operation):
+        from app.backend.repositories import FailureRepository
+
+        session = self.session_factory()
+        try:
+            return operation(FailureObservatory(FailureRepository(session)))
+        finally:
+            session.close()
+
+    def get_failure(self, failure_id):
+        return self._run(lambda observatory: observatory.get_failure(failure_id))
+
+    def list_failures(self, query: FailureQuery):
+        return self._run(lambda observatory: observatory.list_failures(query))
+
+    def summary(self, query: FailureQuery):
+        return self._run(lambda observatory: observatory.summary(query))
+
+    def snapshot(self, query: FailureQuery):
+        return self._run(lambda observatory: observatory.snapshot(query))
+
+
 class ApiServices:
     def readiness(self):
         return {"rag": self.rag is not None, "database": self._database_ready()}
@@ -90,10 +118,7 @@ class ApiServices:
     @property
     def observatory(self):
         if self._failure_observatory is None:
-            from app.backend.repositories import FailureRepository
-
-            session = self.session()
-            self._failure_observatory = FailureObservatory(FailureRepository(session))
+            self._failure_observatory = DatabaseFailureObservatory(self.session)
         return self._failure_observatory
 
 
