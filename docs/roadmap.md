@@ -24,8 +24,9 @@ Completed:
 
 V2 is a deterministic engineering evaluation baseline, not a clinically validated benchmark or safety classifier.
 
-## V3 — Failure Observatory — IN PROGRESS
+## V3 — Failure Observatory — NEXT
 
+Planned:
 - Failure classification and persistence
 - Failure analysis workflows
 - Failure Observatory UI
@@ -33,6 +34,7 @@ V2 is a deterministic engineering evaluation baseline, not a clinically validate
 
 ## V4 — Productionization — PLANNED
 
+Planned:
 - FastAPI implementation
 - PostgreSQL and pgvector
 - Structured persistence
@@ -42,6 +44,7 @@ V2 is a deterministic engineering evaluation baseline, not a clinically validate
 
 ## V5 — Healthcare interoperability — PLANNED
 
+Planned:
 - FHIR
 - Provenance
 - Structured clinical data

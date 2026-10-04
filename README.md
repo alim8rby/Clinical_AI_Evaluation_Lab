@@ -66,9 +66,9 @@ The audit repaired the benchmark evidence documentation and added failure retent
 
 See docs/methodology/v2-audit.md for the freeze record and limitations.
 
-## What is still in progress
+## What comes next
 
-### V3 — Failure Observatory — IN PROGRESS
+### V3 — Failure Observatory — NEXT
 
 - Failure classification and persistence
 - Failure analysis workflows
