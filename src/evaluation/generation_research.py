@@ -74,7 +74,7 @@ def evaluate_generation_case(
     usage = getattr(provider, "last_usage", {})
 
     resolved_answer_id = answer_id or f"generation_{question.question_id}_{provider.model}"
-    citations = build_citations(resolved_answer_id, answer, evidence)
+    citations = build_citations(answer, evidence, answer_id=resolved_answer_id)
     answer_eval = evaluate_question_answer(question, answer, semantic_evaluator)
     grounding_eval = evaluate_answer_grounding(
         resolved_answer_id, answer, citations, evidence, semantic_evaluator
