@@ -23,7 +23,7 @@ Production API, persistence, pgvector retrieval, provider integration, evaluatio
 
 ### V4.13 — Benchmark Expansion — COMPLETE AND FROZEN
 ### V4.14 — Retrieval & Evaluation Challenge Set — COMPLETE AND FROZEN
-### V4.15 — Failure Classifier Upgrade & Hardening Freeze — NEXT
+### V4.15 — Failure Classifier Upgrade & Hardening Freeze — COMPLETE AND FROZEN
 
 ## Explicit exclusions
 
