@@ -68,14 +68,14 @@ V4 is infrastructure and application delivery. It does not redefine RAG semantic
 - experiment and comparison views
 - evidence/traceability views
 
-## V4.8 — Containerization & Local Deployment — NEXT
+## V4.8 — Containerization & Local Deployment — COMPLETE AND FROZEN
 - Dockerfile
 - production compose setup
 - environment configuration
 - database initialization
 - health checks
 
-## V4.9 — CI/CD & Deployment
+## V4.9 — CI/CD & Deployment — NEXT
 - automated test pipeline
 - lint/type checks
 - image build
