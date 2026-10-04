@@ -22,8 +22,8 @@ Production API, persistence, pgvector retrieval, provider integration, evaluatio
 - human calibration remains a later hardening step
 
 ### V4.13 — Benchmark Expansion — COMPLETE AND FROZEN
-### V4.14 — Retrieval & Evaluation Challenge Set — NEXT
-### V4.15 — Failure Classifier Upgrade & Hardening Freeze — PLANNED
+### V4.14 — Retrieval & Evaluation Challenge Set — COMPLETE AND FROZEN
+### V4.15 — Failure Classifier Upgrade & Hardening Freeze — NEXT
 
 ## Explicit exclusions
 
