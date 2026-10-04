@@ -8,7 +8,7 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V3 — Failure Observatory: FROZEN**
+**V4.7 — Frontend Integration: FROZEN**
 
 V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
@@ -77,15 +77,11 @@ See docs/methodology/v2-audit.md for the freeze record and limitations.
 
 See docs/methodology/v3-audit.md for the V3 freeze record.
 
-### V4 — Productionization — NEXT
+### V4 — Productionization
 
-- FastAPI
-- PostgreSQL + pgvector
-- Structured persistence
-- Logging and monitoring
-- Docker
-- Deployment
-- CI/CD
+V4.0–V4.7 are complete and frozen. The application now has a FastAPI boundary, PostgreSQL persistence, pgvector support, Ollama provider integration, evaluation/failure runtime, observability, and an API-backed frontend.
+
+**Next: V4.8 — Containerization & Local Deployment.**
 
 ### V5 — Healthcare interoperability — PLANNED
 
@@ -100,7 +96,7 @@ See docs/methodology/v3-audit.md for the V3 freeze record.
 - Controlled corpus is compact.
 - Answer and grounding evaluation use token-overlap baselines.
 - Reliability signals are heuristic.
-- V3 persistence and UI are local only; production persistence and API infrastructure are deferred to V4.
+- V4 still uses a compact depression benchmark and has not yet completed containerized deployment or CI/CD.
 - No real patient data or autonomous clinical decision-making.
 - Local RAG still uses deterministic hashed-token embeddings and a mock generation provider.
 - No clinical validation is claimed.
@@ -115,6 +111,7 @@ See docs/methodology/v3-audit.md for the V3 freeze record.
 - docs/methodology/ — implementation methodology and audits
 - docs/methodology/v2-audit.md — V2 freeze record
 - docs/methodology/v3-audit.md — V3 freeze record
+- docs/methodology/v4.7-audit.md — V4.7 freeze record
 
 ## Tech direction
 
