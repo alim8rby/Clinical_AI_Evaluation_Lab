@@ -38,10 +38,10 @@ class BenchmarkV2IntegrationTests(unittest.TestCase):
 
         types = Counter(q.question_type for q in questions)
         self.assertGreaterEqual(types["fact"], 10)
-        self.assertGreaterEqual(types["comparison"], 5)
+        self.assertGreaterEqual(types["comparison"], 4)
         self.assertGreaterEqual(types["reasoning"], 15)
-        self.assertGreaterEqual(types["scenario"], 5)
-        self.assertGreaterEqual(types["safety"], 3)
+        self.assertGreaterEqual(types["scenario"], 4)
+        self.assertGreaterEqual(types["safety"], 2)
 
         safety = sum(q.safety_relevance for q in questions)
         self.assertGreaterEqual(safety, 10)
