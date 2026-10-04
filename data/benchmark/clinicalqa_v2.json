@@ -1,0 +1,383 @@
+[
+  {
+    "question_id": "cq2-001",
+    "question": "How do symptoms and functional impact both contribute to characterizing depression?",
+    "domain": "depression",
+    "difficulty": "easy",
+    "question_type": "comparison",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "reference_answer": "Depression is characterized by its symptom pattern and by the effect those symptoms have on functioning, including functioning at home, work, school, and in the community.",
+    "key_concepts": [
+      "symptom pattern",
+      "functional impact",
+      "home",
+      "work",
+      "school"
+    ]
+  },
+  {
+    "question_id": "cq2-002",
+    "question": "What distinguishes a depressive episode from a short-lived change in mood?",
+    "domain": "depression",
+    "difficulty": "easy",
+    "question_type": "fact",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "reference_answer": "A depressive episode involves symptoms for most of the day, nearly every day, for at least two weeks, rather than an ordinary short-lived mood fluctuation.",
+    "key_concepts": [
+      "most of the day",
+      "nearly every day",
+      "two weeks",
+      "mood fluctuation"
+    ]
+  },
+  {
+    "question_id": "cq2-003",
+    "question": "Why can bipolar disorder be relevant when someone presents with depression?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "reasoning",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "reference_answer": "Depressive episodes can occur in bipolar disorder, so assessment should consider whether periods of mania or hypomania are present.",
+    "key_concepts": [
+      "bipolar disorder",
+      "depressive episodes",
+      "mania",
+      "hypomania"
+    ]
+  },
+  {
+    "question_id": "cq2-004",
+    "question": "How do mild, moderate, and severe depression differ in the framework described by the controlled evidence?",
+    "domain": "depression",
+    "difficulty": "easy",
+    "question_type": "comparison",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "reference_answer": "The categories reflect the number and severity of symptoms and their effect on functioning.",
+    "key_concepts": [
+      "mild",
+      "moderate",
+      "severe",
+      "symptoms",
+      "functioning"
+    ]
+  },
+  {
+    "question_id": "cq2-005",
+    "question": "A person reports low mood, poor concentration, sleep disruption, and low energy. What does the controlled evidence indicate about this symptom pattern?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "scenario",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "reference_answer": "These are among the symptoms that may occur in depression, but the symptom list alone does not replace assessment of duration, severity, functioning, and the wider clinical context.",
+    "key_concepts": [
+      "poor concentration",
+      "sleep disruption",
+      "low energy",
+      "duration",
+      "functioning"
+    ]
+  },
+  {
+    "question_id": "cq2-006",
+    "question": "What treatment categories are identified as effective options for depression?",
+    "domain": "depression",
+    "difficulty": "easy",
+    "question_type": "fact",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "reference_answer": "The controlled evidence identifies psychological treatments and medicines as effective treatment categories.",
+    "key_concepts": [
+      "psychological treatments",
+      "medicines",
+      "treatment"
+    ]
+  },
+  {
+    "question_id": "cq2-007",
+    "question": "How does treatment choice differ from simply identifying a treatment that can be effective?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "reasoning",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c",
+      "chunk_0b161e000d97f624"
+    ],
+    "reference_answer": "Identifying effective options does not determine the best choice for every person; treatment planning should consider clinical presentation, severity, preferences, previous response, comorbidities, risks and benefits, availability, and circumstances.",
+    "key_concepts": [
+      "effective options",
+      "clinical presentation",
+      "severity",
+      "preferences",
+      "previous response",
+      "risks and benefits"
+    ]
+  },
+  {
+    "question_id": "cq2-008",
+    "question": "A patient prefers one treatment but another option has different risks and availability. What principle should guide the discussion?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "scenario",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_0b161e000d97f624"
+    ],
+    "reference_answer": "Treatment planning should use shared decision-making, balancing patient preference with clinical presentation, severity, previous response, comorbidities, risks and benefits, availability, and circumstances.",
+    "key_concepts": [
+      "shared decision-making",
+      "patient preference",
+      "risks and benefits",
+      "availability"
+    ]
+  },
+  {
+    "question_id": "cq2-009",
+    "question": "Why is regular review different from using one fixed follow-up schedule for every person?",
+    "domain": "depression",
+    "difficulty": "hard",
+    "question_type": "comparison",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_4492f3fed67d11ff"
+    ],
+    "reference_answer": "Review frequency should reflect the treatment, the person's clinical circumstances, and their level of risk, rather than one fixed schedule for everyone.",
+    "key_concepts": [
+      "review frequency",
+      "treatment",
+      "clinical circumstances",
+      "risk"
+    ]
+  },
+  {
+    "question_id": "cq2-010",
+    "question": "During treatment follow-up, which domains should be reassessed before deciding whether to adjust the plan?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "fact",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_4492f3fed67d11ff"
+    ],
+    "reference_answer": "Follow-up should assess treatment response, adverse effects, adherence, emerging risks, and whether the treatment plan needs adjustment.",
+    "key_concepts": [
+      "response",
+      "adverse effects",
+      "adherence",
+      "emerging risks",
+      "treatment adjustment"
+    ]
+  },
+  {
+    "question_id": "cq2-011",
+    "question": "A patient has not improved and reports taking treatment inconsistently. Why is a structured review important before concluding that treatment failed?",
+    "domain": "depression",
+    "difficulty": "hard",
+    "question_type": "scenario",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_fc1b23978839cab5"
+    ],
+    "reference_answer": "Non-response should prompt review of diagnosis, comorbidities, adherence, treatment adequacy, adverse effects, psychosocial factors, and available further options rather than assuming one intervention failed in isolation.",
+    "key_concepts": [
+      "non-response",
+      "adherence",
+      "treatment adequacy",
+      "diagnosis",
+      "psychosocial factors"
+    ]
+  },
+  {
+    "question_id": "cq2-012",
+    "question": "How do psychosocial factors fit into the assessment of limited treatment response?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "reasoning",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_fc1b23978839cab5"
+    ],
+    "reference_answer": "Psychosocial factors are part of the structured review of non-response and may help explain limited improvement or inform the next treatment strategy.",
+    "key_concepts": [
+      "psychosocial factors",
+      "limited improvement",
+      "non-response",
+      "treatment strategy"
+    ]
+  },
+  {
+    "question_id": "cq2-013",
+    "question": "When might continued treatment after recovery be considered, and what should the decision include?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "reasoning",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_76d79d3e08d6782d"
+    ],
+    "reference_answer": "Continued treatment may be considered when relapse risk is significant, with decisions informed by previous episodes, relapse risk, treatment response, patient preference, and the balance of benefits and harms.",
+    "key_concepts": [
+      "continued treatment",
+      "relapse risk",
+      "previous episodes",
+      "patient preference",
+      "benefits and harms"
+    ]
+  },
+  {
+    "question_id": "cq2-014",
+    "question": "Why should previous episodes be considered when discussing treatment after recovery?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "reasoning",
+    "safety_relevance": false,
+    "expected_evidence": [
+      "chunk_76d79d3e08d6782d"
+    ],
+    "reference_answer": "Previous episodes contribute to assessment of relapse risk and therefore inform whether continued or maintenance treatment should be considered.",
+    "key_concepts": [
+      "previous episodes",
+      "relapse risk",
+      "continued treatment",
+      "maintenance treatment"
+    ]
+  },
+  {
+    "question_id": "cq2-015",
+    "question": "A person experiences an early change in symptoms after starting treatment. Why should the change not automatically be labeled improvement?",
+    "domain": "depression",
+    "difficulty": "hard",
+    "question_type": "scenario",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_2463f3d3f087914f"
+    ],
+    "reference_answer": "Early changes should be interpreted in clinical context because follow-up should consider symptom trajectory, adverse effects, activation or worsening symptoms, adherence, and safety.",
+    "key_concepts": [
+      "early change",
+      "clinical context",
+      "symptom trajectory",
+      "activation",
+      "safety"
+    ]
+  },
+  {
+    "question_id": "cq2-016",
+    "question": "What makes activation or worsening symptoms important during early treatment review?",
+    "domain": "depression",
+    "difficulty": "medium",
+    "question_type": "safety",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_2463f3d3f087914f"
+    ],
+    "reference_answer": "Activation or worsening symptoms are specifically included in early follow-up alongside symptom trajectory, adverse effects, adherence, and safety.",
+    "key_concepts": [
+      "activation",
+      "worsening symptoms",
+      "early follow-up",
+      "safety"
+    ]
+  },
+  {
+    "question_id": "cq2-017",
+    "question": "How are suicide-related symptoms handled differently from ordinary symptom monitoring?",
+    "domain": "depression",
+    "difficulty": "hard",
+    "question_type": "safety",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_75092e03f18cfb22",
+      "chunk_4492f3fed67d11ff"
+    ],
+    "reference_answer": "Suicide risk should be explicitly assessed, while ongoing treatment review should also look for emerging risks and adjust care according to the person's clinical circumstances and level of risk.",
+    "key_concepts": [
+      "suicide risk",
+      "explicit assessment",
+      "emerging risks",
+      "clinical circumstances",
+      "level of risk"
+    ]
+  },
+  {
+    "question_id": "cq2-018",
+    "question": "How do risk assessment and treatment selection interact in depression care?",
+    "domain": "depression",
+    "difficulty": "hard",
+    "question_type": "reasoning",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_75092e03f18cfb22",
+      "chunk_0b161e000d97f624"
+    ],
+    "reference_answer": "Risk assessment is part of the broader clinical assessment and should inform treatment planning alongside severity, comorbidity, preferences, previous response, risks and benefits, and circumstances.",
+    "key_concepts": [
+      "risk assessment",
+      "treatment planning",
+      "severity",
+      "comorbidity",
+      "preferences",
+      "risks and benefits"
+    ]
+  },
+  {
+    "question_id": "cq2-019",
+    "question": "Why can treatment review be understood as both an effectiveness check and a safety check?",
+    "domain": "depression",
+    "difficulty": "hard",
+    "question_type": "comparison",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_4492f3fed67d11ff",
+      "chunk_2463f3d3f087914f"
+    ],
+    "reference_answer": "Review assesses response and adherence while also checking adverse effects, emerging risks, activation or worsening symptoms, and safety, so it supports both treatment adjustment and safer care.",
+    "key_concepts": [
+      "response",
+      "adherence",
+      "adverse effects",
+      "emerging risks",
+      "activation",
+      "safety"
+    ]
+  },
+  {
+    "question_id": "cq2-020",
+    "question": "What principle should guide interpretation of apparent treatment non-response when early symptom changes are also present?",
+    "domain": "depression",
+    "difficulty": "hard",
+    "question_type": "reasoning",
+    "safety_relevance": true,
+    "expected_evidence": [
+      "chunk_fc1b23978839cab5",
+      "chunk_2463f3d3f087914f"
+    ],
+    "reference_answer": "Apparent non-response should trigger structured review rather than a premature conclusion, including diagnosis, treatment adequacy, adherence, adverse effects, psychosocial factors, symptom trajectory, and safety.",
+    "key_concepts": [
+      "structured review",
+      "diagnosis",
+      "treatment adequacy",
+      "adherence",
+      "adverse effects",
+      "symptom trajectory",
+      "safety"
+    ]
+  }
+]
