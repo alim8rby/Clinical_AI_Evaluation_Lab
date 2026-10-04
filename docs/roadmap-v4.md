@@ -75,14 +75,14 @@ V4 is infrastructure and application delivery. It does not redefine RAG semantic
 - database initialization
 - health checks
 
-## V4.9 — CI/CD & Deployment — NEXT
+## V4.9 — CI/CD & Deployment — COMPLETE AND FROZEN
 - automated test pipeline
 - lint/type checks
 - image build
 - deployment configuration
 - production secrets boundary
 
-## V4.10 — V4 Audit & Freeze
+## V4.10 — V4 Audit & Freeze — NEXT
 - API contract audit
 - persistence audit
 - retrieval audit
