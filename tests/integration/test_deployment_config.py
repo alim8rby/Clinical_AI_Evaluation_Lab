@@ -24,3 +24,15 @@ class DeploymentConfigTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    def test_ci_workflow_exists(self):
+        content = (self.ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+        self.assertIn("python -m unittest discover", content)
+        self.assertIn("docker build", content)
+        self.assertIn("ruff check", content)
+
+    def test_deployment_workflow_publishes_immutable_sha(self):
+        content = (self.ROOT / ".github" / "workflows" / "deploy.yml").read_text(encoding="utf-8")
+        self.assertIn("ghcr.io/", content)
+        self.assertIn("github.sha", content)
+        self.assertIn("GITHUB_TOKEN", content)
