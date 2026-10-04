@@ -15,7 +15,7 @@ from src.failure_analysis.workflow import process_result
 from src.pipeline import ClinicalRAG
 
 from app.backend.repositories import AnswerRepository, CitationRepository, EvaluationRepository, ExperimentRepository, FailureRepository, RunRepository
-from app.backend.observability import get_correlation_id, logger
+from app.backend.observability import logger
 
 
 @dataclass(frozen=True)
