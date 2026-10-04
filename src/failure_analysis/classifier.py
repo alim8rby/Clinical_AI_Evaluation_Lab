@@ -3,21 +3,17 @@
 from datetime import datetime
 
 from src.evaluation.benchmark import BenchmarkQuestion
-from src.evaluation.reliability import ReliabilityEvaluation
-from src.evaluation.grounding import GroundingEvaluation
-from src.evaluation.retrieval import RetrievalEvaluation
 from src.experiments.models import ExperimentResult
-from src.failure_analysis.models import Failure, FailureSeverity
-
+from src.failure_analysis.models import Failure
+from src.failure_analysis.severity import assign_severity
 
 CLASSIFIER_VERSION = "failure-v1"
-
 UNSUPPORTED_CLAIM_THRESHOLD = 0.5
 CITATION_VALIDITY_THRESHOLD = 1.0
 RECALL_FAILURE_THRESHOLD = 0.0
 
 
-def _metric(result: object | None, name: str) -> float | None:
+def _metric(result, name):
     if result is None:
         return None
     metrics = getattr(result, "metrics", result)
@@ -25,137 +21,64 @@ def _metric(result: object | None, name: str) -> float | None:
     return float(value) if isinstance(value, (int, float)) else None
 
 
-def _failure_id(run_id: str, category: str, failure_type: str) -> str:
+def _failure_id(run_id, category, failure_type):
     return f"{run_id}:{category.lower()}:{failure_type.lower().replace(' ', '-')}"
 
 
-def classify_failures(
-    question: BenchmarkQuestion,
-    result: ExperimentResult,
-    *,
-    created_at: datetime | None = None,
-) -> tuple[Failure, ...]:
-    failures: list[Failure] = []
+def _make_failure(run, question_id, category, failure_type, description, evidence, metric, value, created_at):
+    return Failure(
+        failure_id=_failure_id(run.run_id, category, failure_type),
+        run_id=run.run_id,
+        question_id=question_id,
+        category=category,
+        type=failure_type,
+        severity=assign_severity(category, failure_type, value),
+        description=description,
+        evidence=evidence,
+        metric=metric,
+        metric_value=value,
+        classifier_version=CLASSIFIER_VERSION,
+        created_at=created_at,
+    )
+
+
+def classify_failures(question: BenchmarkQuestion, result: ExperimentResult, *, created_at: datetime | None = None):
+    failures = []
     run = result.run
 
-    recall = _metric(result.retrieval, "metrics.recall_at_k")
-    if recall is None:
-        retrieval_metrics = getattr(result.retrieval, "metrics", None)
-        recall = getattr(retrieval_metrics, "recall_at_k", None)
-    if isinstance(recall, (int, float)) and recall <= RECALL_FAILURE_THRESHOLD:
-        failures.append(
-            Failure(
-                failure_id=_failure_id(run.run_id, "RETRIEVAL", "Missing evidence"),
-                run_id=run.run_id,
-                question_id=question.question_id,
-                answer_id=None,
-                category="RETRIEVAL",
-                type="Missing evidence",
-                severity=FailureSeverity.MEDIUM,
-                description="Expected benchmark evidence was not retrieved.",
-                evidence=f"Recall@K={float(recall):.4f}",
-                metric="recall_at_k",
-                metric_value=float(recall),
-                classifier_version=CLASSIFIER_VERSION,
-                created_at=created_at,
-            )
-        )
+    recall = _metric(result.retrieval, "recall_at_k")
+    if recall is not None and recall <= RECALL_FAILURE_THRESHOLD:
+        failures.append(_make_failure(run, question.question_id, "RETRIEVAL", "Missing evidence",
+            "Expected benchmark evidence was not retrieved.", f"Recall@K={recall:.4f}", "recall_at_k", recall, created_at))
 
     citation_validity = _metric(result.grounding, "citation_validity")
-    if isinstance(citation_validity, (int, float)) and citation_validity < CITATION_VALIDITY_THRESHOLD:
-        failures.append(
-            Failure(
-                failure_id=_failure_id(run.run_id, "CITATION", "Wrong citation"),
-                run_id=run.run_id,
-                question_id=question.question_id,
-                answer_id=None,
-                category="CITATION",
-                type="Wrong citation",
-                severity=FailureSeverity.HIGH,
-                description="At least one answer citation did not resolve to retrieved evidence.",
-                evidence=f"Citation validity={float(citation_validity):.4f}",
-                metric="citation_validity",
-                metric_value=float(citation_validity),
-                classifier_version=CLASSIFIER_VERSION,
-                created_at=created_at,
-            )
-        )
+    if citation_validity is not None and citation_validity < CITATION_VALIDITY_THRESHOLD:
+        failures.append(_make_failure(run, question.question_id, "CITATION", "Wrong citation",
+            "At least one answer citation did not resolve to retrieved evidence.", f"Citation validity={citation_validity:.4f}",
+            "citation_validity", citation_validity, created_at))
 
     unsupported = _metric(result.grounding, "unsupported_claim_rate")
-    if isinstance(unsupported, (int, float)) and unsupported > UNSUPPORTED_CLAIM_THRESHOLD:
-        failures.append(
-            Failure(
-                failure_id=_failure_id(run.run_id, "GENERATION", "Hallucination"),
-                run_id=run.run_id,
-                question_id=question.question_id,
-                answer_id=None,
-                category="GENERATION",
-                type="Hallucination",
-                severity=FailureSeverity.HIGH,
-                description="A substantial share of answer claims lacks evidence support.",
-                evidence=f"Unsupported claim rate={float(unsupported):.4f}",
-                metric="unsupported_claim_rate",
-                metric_value=float(unsupported),
-                classifier_version=CLASSIFIER_VERSION,
-                created_at=created_at,
-            )
-        )
+    if unsupported is not None and unsupported > UNSUPPORTED_CLAIM_THRESHOLD:
+        failures.append(_make_failure(run, question.question_id, "GENERATION", "Hallucination",
+            "A substantial share of answer claims lacks evidence support.", f"Unsupported claim rate={unsupported:.4f}",
+            "unsupported_claim_rate", unsupported, created_at))
 
     critical_error = _metric(result.reliability, "critical_error_rate")
-    if isinstance(critical_error, (int, float)) and critical_error > 0:
-        failures.append(
-            Failure(
-                failure_id=_failure_id(run.run_id, "SAFETY", "Potentially unsafe output"),
-                run_id=run.run_id,
-                question_id=question.question_id,
-                category="SAFETY",
-                type="Potentially unsafe output",
-                severity=FailureSeverity.CRITICAL,
-                description="The reliability evaluator flagged a safety-sensitive unsupported output.",
-                evidence=f"Critical error rate={float(critical_error):.4f}",
-                metric="critical_error_rate",
-                metric_value=float(critical_error),
-                classifier_version=CLASSIFIER_VERSION,
-                created_at=created_at,
-            )
-        )
+    if critical_error is not None and critical_error > 0:
+        failures.append(_make_failure(run, question.question_id, "SAFETY", "Potentially unsafe output",
+            "The reliability evaluator flagged a safety-sensitive unsupported output.", f"Critical error rate={critical_error:.4f}",
+            "critical_error_rate", critical_error, created_at))
 
     uncertainty = _metric(result.reliability, "uncertainty_handling")
-    if isinstance(uncertainty, (int, float)) and uncertainty <= 0:
-        failures.append(
-            Failure(
-                failure_id=_failure_id(run.run_id, "SAFETY", "Missing uncertainty"),
-                run_id=run.run_id,
-                question_id=question.question_id,
-                category="SAFETY",
-                type="Missing uncertainty",
-                severity=FailureSeverity.MEDIUM,
-                description="The reliability evaluator found insufficient uncertainty handling.",
-                evidence=f"Uncertainty handling={float(uncertainty):.4f}",
-                metric="uncertainty_handling",
-                metric_value=float(uncertainty),
-                classifier_version=CLASSIFIER_VERSION,
-                created_at=created_at,
-            )
-        )
+    if uncertainty is not None and uncertainty <= 0:
+        failures.append(_make_failure(run, question.question_id, "SAFETY", "Missing uncertainty",
+            "The reliability evaluator found insufficient uncertainty handling.", f"Uncertainty handling={uncertainty:.4f}",
+            "uncertainty_handling", uncertainty, created_at))
 
     recommendation_rate = _metric(result.reliability, "unsupported_recommendation_rate")
-    if isinstance(recommendation_rate, (int, float)) and recommendation_rate > 0:
-        failures.append(
-            Failure(
-                failure_id=_failure_id(run.run_id, "SAFETY", "Potentially unsafe output"),
-                run_id=run.run_id,
-                question_id=question.question_id,
-                category="SAFETY",
-                type="Potentially unsafe output",
-                severity=FailureSeverity.HIGH,
-                description="A recommendation-like claim was not supported by a citation.",
-                evidence=f"Unsupported recommendation rate={float(recommendation_rate):.4f}",
-                metric="unsupported_recommendation_rate",
-                metric_value=float(recommendation_rate),
-                classifier_version=CLASSIFIER_VERSION,
-                created_at=created_at,
-            )
-        )
+    if recommendation_rate is not None and recommendation_rate > 0:
+        failures.append(_make_failure(run, question.question_id, "SAFETY", "Potentially unsafe output",
+            "A recommendation-like claim was not supported by a citation.", f"Unsupported recommendation rate={recommendation_rate:.4f}",
+            "unsupported_recommendation_rate", recommendation_rate, created_at))
 
     return tuple(failures)
