@@ -8,7 +8,7 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V4.7 — Frontend Integration: FROZEN**
+**V4.10 — V4 Productionization: FROZEN**
 
 V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
@@ -79,9 +79,7 @@ See docs/methodology/v3-audit.md for the V3 freeze record.
 
 ### V4 — Productionization
 
-V4.0–V4.7 are complete and frozen. The application now has a FastAPI boundary, PostgreSQL persistence, pgvector support, Ollama provider integration, evaluation/failure runtime, observability, and an API-backed frontend.
-
-**Next: V4.8 — Containerization & Local Deployment.**
+V4.0–V4.10 are complete and frozen. The application has a FastAPI boundary, PostgreSQL persistence, pgvector retrieval, Ollama provider integration, evaluation/failure runtime, observability, an API-backed frontend, containers, and CI/CD.
 
 ### V5 — Healthcare interoperability — PLANNED
 
@@ -96,9 +94,9 @@ V4.0–V4.7 are complete and frozen. The application now has a FastAPI boundary,
 - Controlled corpus is compact.
 - Answer and grounding evaluation use token-overlap baselines.
 - Reliability signals are heuristic.
-- V4 still uses a compact depression benchmark and has not yet completed containerized deployment or CI/CD.
+- V4 uses a compact depression benchmark and has no hosted cloud deployment yet.
 - No real patient data or autonomous clinical decision-making.
-- Local RAG still uses deterministic hashed-token embeddings and a mock generation provider.
+- The PostgreSQL runtime uses the deterministic 256-dimensional embedding baseline; Ollama generation is the live provider.
 - No clinical validation is claimed.
 
 ## Documentation
@@ -111,11 +109,11 @@ V4.0–V4.7 are complete and frozen. The application now has a FastAPI boundary,
 - docs/methodology/ — implementation methodology and audits
 - docs/methodology/v2-audit.md — V2 freeze record
 - docs/methodology/v3-audit.md — V3 freeze record
-- docs/methodology/v4.7-audit.md — V4.7 freeze record
+- docs/methodology/v4.10-audit.md — final V4 freeze record
 
 ## Tech direction
 
-Python · FastAPI · PostgreSQL · pgvector · LLM provider abstraction · Docker · pytest
+Python · FastAPI · PostgreSQL · pgvector · LLM provider abstraction · Docker · GitHub Actions · Ruff · mypy
 
 Production infrastructure is introduced in later phases. V2 remains deliberately local and deterministic.
 
