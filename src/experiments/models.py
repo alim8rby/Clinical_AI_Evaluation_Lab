@@ -42,7 +42,7 @@ class RunRecord:
     input_tokens: int | None
     output_tokens: int | None
     cost: float | None
-    error: str | None
+    error: str | None = None
 
 @dataclass(frozen=True)
 class ExperimentResult:
