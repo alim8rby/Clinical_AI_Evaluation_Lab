@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 class ErrorBody(BaseModel): code:str; message:str; details:dict=Field(default_factory=dict)
 class ErrorResponse(BaseModel): error:ErrorBody
@@ -12,11 +12,42 @@ class FailureResponse(BaseModel):
 class FailureListResponse(BaseModel): failures:list[FailureResponse]
 class FailureSummaryResponse(BaseModel): total:int; by_category:dict[str,int]; by_type:dict[str,int]; by_severity:dict[str,int]
 class ExperimentCreateRequest(BaseModel):
-    name:str=Field(min_length=1); description:str=""; model_config:dict=Field(default_factory=dict); embedding_config:dict=Field(default_factory=dict); retriever_config:dict=Field(default_factory=dict); top_k:int=Field(default=5,gt=0); prompt_version:str=Field(min_length=1); benchmark_version:str=Field(min_length=1)
+    model_config = ConfigDict(populate_by_name=True)
+    name: str = Field(min_length=1)
+    description: str = ""
+    model_config_: dict = Field(default_factory=dict, alias="model_config")
+    embedding_config: dict = Field(default_factory=dict)
+    retriever_config: dict = Field(default_factory=dict)
+    top_k: int = Field(default=5, gt=0)
+    prompt_version: str = Field(min_length=1)
+    benchmark_version: str = Field(min_length=1)
 class ExperimentResponse(BaseModel):
-    experiment_id:str; name:str; description:str; model_config:dict; embedding_config:dict; retriever_config:dict; top_k:int; prompt_version:str; benchmark_version:str; created_at:str
+    model_config = ConfigDict(populate_by_name=True)
+    experiment_id: str
+    name: str
+    description: str
+    model_config_: dict = Field(alias="model_config")
+    embedding_config: dict
+    retriever_config: dict
+    top_k: int
+    prompt_version: str
+    benchmark_version: str
+    created_at: str
+
     @classmethod
-    def from_domain(cls,e): return cls(experiment_id=e.experiment_id,name=e.name,description=e.description,model_config=e.config.model_config,embedding_config=e.config.embedding_config,retriever_config=e.config.retriever_config,top_k=e.config.top_k,prompt_version=e.config.prompt_version,benchmark_version=e.config.benchmark_version,created_at=e.created_at.isoformat())
+    def from_domain(cls, e):
+        return cls(
+            experiment_id=e.experiment_id,
+            name=e.name,
+            description=e.description,
+            model_config_=e.config.model_config,
+            embedding_config=e.config.embedding_config,
+            retriever_config=e.config.retriever_config,
+            top_k=e.config.top_k,
+            prompt_version=e.config.prompt_version,
+            benchmark_version=e.config.benchmark_version,
+            created_at=e.created_at.isoformat(),
+        )
 class RunRequest(BaseModel):
     question_id:str=Field(min_length=1); question:str=Field(min_length=1); domain:str="depression"; difficulty:str="easy"; expected_evidence:list[str]=Field(min_length=1); reference_answer:str=Field(min_length=1); key_concepts:list[str]=Field(min_length=1)
 class RunResponse(BaseModel):
