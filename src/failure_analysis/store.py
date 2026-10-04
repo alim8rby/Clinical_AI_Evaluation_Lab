@@ -1,3 +1,4 @@
+from __future__ import annotations
 """Local structured persistence for failure records."""
 
 from pathlib import Path
