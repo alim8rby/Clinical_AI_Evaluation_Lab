@@ -1,0 +1,158 @@
+[
+  {
+    "case_id": "rch-001",
+    "question": "Which clinical features separate a depressive episode from ordinary short-lived mood changes?",
+    "challenge_type": "lexical_mismatch",
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "distractor_evidence": [
+      "chunk_4492f3fed67d11ff",
+      "chunk_76d79d3e08d6782d"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "case_id": "rch-002",
+    "question": "What should be checked when assessing immediate self-harm risk in someone presenting with depression?",
+    "challenge_type": "lexical_mismatch",
+    "expected_evidence": [
+      "chunk_75092e03f18cfb22"
+    ],
+    "distractor_evidence": [
+      "chunk_8cdc380723ba4f0c",
+      "chunk_2463f3d3f087914f"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "case_id": "rch-003",
+    "question": "What patient-level and treatment-level considerations should shape selection between available depression interventions?",
+    "challenge_type": "multi_evidence",
+    "expected_evidence": [
+      "chunk_0b161e000d97f624",
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "distractor_evidence": [
+      "chunk_4492f3fed67d11ff"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "case_id": "rch-004",
+    "question": "What should a clinician look for during early review to determine whether a change after treatment needs attention?",
+    "challenge_type": "multi_evidence",
+    "expected_evidence": [
+      "chunk_2463f3d3f087914f",
+      "chunk_4492f3fed67d11ff"
+    ],
+    "distractor_evidence": [
+      "chunk_76d79d3e08d6782d"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "case_id": "rch-005",
+    "question": "If symptoms persist despite an intervention, what structured checks should precede changing the treatment strategy?",
+    "challenge_type": "lexical_mismatch",
+    "expected_evidence": [
+      "chunk_fc1b23978839cab5"
+    ],
+    "distractor_evidence": [
+      "chunk_4492f3fed67d11ff",
+      "chunk_0b161e000d97f624"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "case_id": "rch-006",
+    "question": "What factors determine whether treatment should continue after depressive symptoms have improved?",
+    "challenge_type": "multi_evidence",
+    "expected_evidence": [
+      "chunk_76d79d3e08d6782d"
+    ],
+    "distractor_evidence": [
+      "chunk_fc1b23978839cab5",
+      "chunk_4492f3fed67d11ff"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "case_id": "rch-007",
+    "question": "Which interventions are described as psychological treatments for depression?",
+    "challenge_type": "lexical_mismatch",
+    "expected_evidence": [
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "distractor_evidence": [
+      "chunk_0b161e000d97f624"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "case_id": "rch-008",
+    "question": "How should the timing of follow-up be individualized rather than fixed?",
+    "challenge_type": "ranking",
+    "expected_evidence": [
+      "chunk_4492f3fed67d11ff"
+    ],
+    "distractor_evidence": [
+      "chunk_2463f3d3f087914f",
+      "chunk_76d79d3e08d6782d"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "case_id": "rch-009",
+    "question": "What broader assessment context matters when symptoms suggest depression but diagnosis or treatment history is uncertain?",
+    "challenge_type": "multi_evidence",
+    "expected_evidence": [
+      "chunk_75092e03f18cfb22",
+      "chunk_0b161e000d97f624"
+    ],
+    "distractor_evidence": [
+      "chunk_8cdc380723ba4f0c",
+      "chunk_fc1b23978839cab5"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "case_id": "rch-010",
+    "question": "What should be reconsidered when a person appears not to benefit from depression treatment?",
+    "challenge_type": "ranking",
+    "expected_evidence": [
+      "chunk_fc1b23978839cab5"
+    ],
+    "distractor_evidence": [
+      "chunk_4492f3fed67d11ff",
+      "chunk_76d79d3e08d6782d"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "case_id": "rch-011",
+    "question": "Which signals make an early treatment change potentially concerning rather than simply evidence of response?",
+    "challenge_type": "lexical_mismatch",
+    "expected_evidence": [
+      "chunk_2463f3d3f087914f"
+    ],
+    "distractor_evidence": [
+      "chunk_4492f3fed67d11ff",
+      "chunk_8cdc380723ba4f0c"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "case_id": "rch-012",
+    "question": "What should be balanced when deciding on longer-term treatment after recovery?",
+    "challenge_type": "multi_evidence",
+    "expected_evidence": [
+      "chunk_76d79d3e08d6782d"
+    ],
+    "distractor_evidence": [
+      "chunk_0b161e000d97f624",
+      "chunk_4492f3fed67d11ff"
+    ],
+    "difficulty": "medium"
+  }
+]
