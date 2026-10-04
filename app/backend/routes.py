@@ -29,7 +29,7 @@ def qa(request:QARequest):
 
 @router.post("/experiments",response_model=ExperimentResponse)
 def create_experiment(request:ExperimentCreateRequest):
-    config=ExperimentConfig(request.model_config,request.embedding_config,request.retriever_config,request.top_k,request.prompt_version,request.benchmark_version)
+    config=ExperimentConfig(request.model_config_,request.embedding_config,request.retriever_config,request.top_k,request.prompt_version,request.benchmark_version)
     experiment=Experiment.create(request.name,request.description,config,created_at=datetime.now(timezone.utc).replace(tzinfo=None))
     session=services.session()
     try: services.runtime(session).create_experiment(experiment)
