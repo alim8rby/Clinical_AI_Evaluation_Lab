@@ -7,8 +7,8 @@ from app.backend.database import DATABASE_URL
 
 
 MIGRATIONS = (
-    Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "001_initial.sql",
-    Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "002_pgvector.sql",
+    ("001_initial", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "001_initial.sql"),
+    ("002_pgvector", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "002_pgvector.sql"),
 )
 
 
@@ -19,8 +19,24 @@ def main() -> None:
 
     engine = create_engine(DATABASE_URL)
     with engine.begin() as connection:
-        for migration in MIGRATIONS:
+        connection.execute(
+            text(
+                "CREATE TABLE IF NOT EXISTS schema_migrations "
+                "(version VARCHAR(100) PRIMARY KEY, applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)"
+            )
+        )
+        for version, migration in MIGRATIONS:
+            applied = connection.execute(
+                text("SELECT 1 FROM schema_migrations WHERE version = :version"),
+                {"version": version},
+            ).scalar()
+            if applied:
+                continue
             connection.execute(text(migration.read_text(encoding="utf-8")))
+            connection.execute(
+                text("INSERT INTO schema_migrations (version) VALUES (:version)"),
+                {"version": version},
+            )
     print("CAIEL database initialized.")
 
 
