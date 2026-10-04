@@ -10,7 +10,6 @@ from src.evaluation.retrieval import RetrievalEvaluation
 from src.evaluation.retrieval_metrics import RetrievalMetrics
 from src.experiments.models import ExperimentResult, RunRecord
 from src.failure_analysis.classifier import CLASSIFIER_VERSION, classify_failures
-from src.failure_analysis.models import FailureSeverity
 
 
 class FailureClassifierTests(unittest.TestCase):
