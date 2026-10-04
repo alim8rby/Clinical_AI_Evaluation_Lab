@@ -25,7 +25,7 @@ class ApiFoundationTests(unittest.TestCase):
     def test_not_found_error_contract(self):
         response = self.client.get("/api/v1/failures/missing")
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()["error"], {"code":"NOT_FOUND","message":"failure not found","details":{}})
+        self.assertEqual(response.json()["error"], {"code":"NOT_FOUND","message":"failure not found: missing","details":{}})
 
 if __name__ == "__main__":
     unittest.main()
