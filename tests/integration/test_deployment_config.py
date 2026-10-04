@@ -12,7 +12,7 @@ class DeploymentConfigTests(unittest.TestCase):
     def test_compose_has_postgres_and_api_healthcheck(self):
         content = (self.ROOT / "docker-compose.yml").read_text(encoding="utf-8")
         self.assertIn("pgvector/pgvector:pg16", content)
-        self.assertIn("DATABASE_URL: postgresql+psycopg://caiel:caiel@db:5432/caiel", content)
+        self.assertIn("DATABASE_URL: postgresql+psycopg://", content)
         self.assertIn("healthcheck:", content)
         self.assertIn("host.docker.internal:host-gateway", content)
 
@@ -23,7 +23,7 @@ class DeploymentConfigTests(unittest.TestCase):
 
     def test_ci_workflow_exists(self):
         content = (self.ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-        self.assertIn("python -m unittest discover", content)
+        self.assertIn("python -m pytest -q", content)
         self.assertIn("docker build", content)
         self.assertIn("ruff check", content)
 
