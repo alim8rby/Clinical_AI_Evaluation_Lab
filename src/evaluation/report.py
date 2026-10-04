@@ -1,6 +1,5 @@
 """Reproducible evaluation report generation."""
 from dataclasses import dataclass
-from src.experiments.models import ExperimentResult
 
 @dataclass(frozen=True)
 class EvaluationReport:
