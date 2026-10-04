@@ -24,6 +24,7 @@ class ChunkRow(Base):
     section: Mapped[str | None] = mapped_column(String(500), nullable=True)
     page: Mapped[int | None] = mapped_column(Integer, nullable=True)
     chunk_index: Mapped[int] = mapped_column(Integer)
+    embedding: Mapped[list | None] = mapped_column(JSON, nullable=True)
 
 
 class ExperimentRow(Base):
