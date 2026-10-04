@@ -1,6 +1,6 @@
 # V4 Roadmap — Productionization
 
-V4.0–V4.10 are complete and frozen. The repository then entered a bounded **V4 Hardening** phase to address known methodological limitations without redefining V1–V3 domain contracts.
+V4.0–V4.15 are complete and frozen. V4.11–V4.15 formed a bounded **V4 Hardening** phase to address known methodological limitations without redefining V1–V3 domain contracts.
 
 ## V4.0–V4.10 — COMPLETE AND FROZEN
 Production API, persistence, pgvector retrieval, provider integration, evaluation/failure runtime, observability, frontend, containers, CI/CD, and final audit.
