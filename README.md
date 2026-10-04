@@ -8,7 +8,7 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V4.12 — V4 Hardening: COMPLETE AND FROZEN**
+**V4.15 — V4 Hardening: COMPLETE AND FROZEN**
 
 V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
@@ -112,6 +112,7 @@ V4.0–V4.10 productionization is frozen; V4.11–V4.12 hardening is also frozen
 - docs/methodology/v4.10-audit.md — V4 productionization freeze record
 - docs/methodology/v4.11-semantic-embeddings.md — semantic embedding hardening
 - docs/methodology/v4.12-semantic-evaluation.md — semantic evaluation hardening
+- docs/methodology/v4.15-failure-classifier.md — failure classifier hardening
 
 ## Tech direction
 
