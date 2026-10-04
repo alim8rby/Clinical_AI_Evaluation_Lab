@@ -4,98 +4,32 @@
 
 Turn V2 evaluation signals into a structured system for classification, inspection, analysis, and regression testing.
 
-## Priority recommendation
+## V3 status
 
-Keep V3 local and UI-independent until the failure domain is stable.
+**V3.0–V3.10: COMPLETE AND FROZEN**
 
-**Do not introduce PostgreSQL, production APIs, authentication, deployment, or other V4 infrastructure during V3.**
+The phase remains local and UI-independent at the domain boundary. Production infrastructure is intentionally deferred to V4.
 
-## V3.0 — Failure Architecture & Scope — COMPLETE
+## Completed scope
 
-- Freeze failure contract
-- Freeze taxonomy boundary
-- Separate detection from classification
-- Define severity
-- Define provenance
-- Define persistence boundary
-- Define analysis/query boundary
-- Define regression boundary
-- Define UI boundary
-- Define V2 compatibility rules
+- Failure architecture and contract
+- Failure model and deterministic serialization
+- Deterministic classification
+- Severity and triage
+- Local JSON persistence
+- Failure analysis and filtering
+- Known-failure regression suite
+- Observatory query layer
+- Failure Observatory UI
+- End-to-end workflow integration
+- V3 audit and freeze
 
-## V3.1 — Failure Data Model — NEXT
+## Freeze boundary
 
-- Failure dataclass
-- Severity model
-- Validation
-- Serialization contract
-- Unit tests
+V3 does not introduce PostgreSQL, production APIs, authentication, deployment, Kubernetes, real patient data, autonomous clinical decisions, additional clinical domains, fine-tuning, or multi-agent systems.
 
-## V3.2 — Failure Classification Engine
+## Next phase
 
-- Deterministic detection signals
-- Taxonomy mapping
-- Classifier versioning
-- Unit tests
+**V4 — Productionization**
 
-## V3.3 — Failure Severity & Triage
-
-- Deterministic severity rules
-- Severity rationale
-- Tests
-
-## V3.4 — Failure Persistence
-
-- Local structured result store
-- Stable IDs
-- Deterministic serialization
-- Loading and overwrite protection
-
-## V3.5 — Failure Analysis
-
-- Category/type/severity counts
-- Failure rates
-- Experiment/question filters
-- Recurring failure analysis
-
-## V3.6 — Failure Regression Suite
-
-- Regression case model
-- Known-failure fixtures
-- Pass/fail evaluation
-- Recurrence protection
-
-## V3.7 — Failure Observatory Backend
-
-- Failure query layer
-- Filtering
-- Detail retrieval
-- Summaries
-
-## V3.8 — Failure Observatory UI
-
-- Summary
-- Failure list
-- Filters
-- Failure detail
-- Traceability
-
-## V3.9 — V3 Integration
-
-- End-to-end V2 → failure pipeline
-- Persistence
-- Analysis
-- Regression
-- Observatory
-
-## V3.10 — V3 Audit & Freeze
-
-- Contract audit
-- Classification audit
-- Severity audit
-- Persistence audit
-- Regression audit
-- UI/backend boundary audit
-- V2 compatibility audit
-- Documentation and tests
-- Freeze V3
+The next implementation boundary is the production API and persistence layer. V3 domain contracts should be treated as frozen inputs to that work.
