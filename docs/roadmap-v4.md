@@ -21,8 +21,8 @@ Production API, persistence, pgvector retrieval, provider integration, evaluatio
 - integration and regression coverage
 - human calibration remains a later hardening step
 
-### V4.13 — Benchmark Expansion — PLANNED
-### V4.14 — Retrieval & Evaluation Challenge Set — PLANNED
+### V4.13 — Benchmark Expansion — COMPLETE AND FROZEN
+### V4.14 — Retrieval & Evaluation Challenge Set — NEXT
 ### V4.15 — Failure Classifier Upgrade & Hardening Freeze — PLANNED
 
 ## Explicit exclusions
