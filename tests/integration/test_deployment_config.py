@@ -19,6 +19,13 @@ class DeploymentConfigTests(unittest.TestCase):
     def test_database_initializer_is_idempotent(self):
         content = (self.ROOT / "scripts" / "init_db.py").read_text(encoding="utf-8")
         self.assertIn("schema_migrations", content)
+
+    def test_semantic_embedding_migration_is_registered(self):
+        content = (self.ROOT / "scripts" / "init_db.py").read_text(encoding="utf-8")
+        self.assertIn("003_semantic_embeddings", content)
+        migration = (self.ROOT / "app" / "backend" / "migrations" / "003_semantic_embeddings.sql").read_text(encoding="utf-8")
+        self.assertIn("vector(768)", migration)
+        self.assertIn("semantic_embedding", migration)
         self.assertIn("WHERE version = :version", content)
 
     def test_ci_workflow_exists(self):
