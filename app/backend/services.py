@@ -157,7 +157,7 @@ def build_default_rag():
     if DATABASE_URL.startswith(("postgresql://", "postgresql+psycopg://")):
         rag = DatabaseClinicalRAG(SessionLocal, generator)
     else:
-        rag = ClinicalRAG(VectorIndex(), generator)
+        rag = ClinicalRAG(VectorIndex("data/caiel-dev-index.json"), generator)
 
     for document in documents:
         rag.ingest(document)
