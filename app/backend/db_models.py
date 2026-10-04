@@ -25,7 +25,6 @@ class ChunkRow(Base):
     page: Mapped[int | None] = mapped_column(Integer, nullable=True)
     chunk_index: Mapped[int] = mapped_column(Integer)
     embedding: Mapped[list | None] = mapped_column(JSON, nullable=True)
-    semantic_embedding: Mapped[list | None] = mapped_column(JSON, nullable=True)
 
 
 class ExperimentRow(Base):
