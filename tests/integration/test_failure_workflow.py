@@ -10,6 +10,7 @@ from src.experiments.models import ExperimentResult, RunRecord
 from src.failure_analysis.models import FailureSeverity
 from src.failure_analysis.observatory import FailureQuery
 from src.failure_analysis.store import FailureStore
+from src.failure_analysis.regression import assert_regression_suite
 from src.failure_analysis.workflow import process_result
 
 
@@ -101,6 +102,9 @@ class FailureWorkflowIntegrationTests(unittest.TestCase):
             )
             self.assertEqual(len(critical), 1)
             self.assertEqual(critical[0].type, "Hallucination")
+
+    def test_regression_guard_remains_green(self):
+        assert_regression_suite()
 
     def test_processing_same_result_is_idempotent(self):
         with tempfile.TemporaryDirectory() as tmp:
