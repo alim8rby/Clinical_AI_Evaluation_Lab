@@ -4,40 +4,27 @@
 
 ClinicalQA-v1 is the controlled benchmark for evaluating the V1 depression RAG system.
 
-The initial seed contains eight questions across easy, medium, and hard difficulty. It is an engineering seed, not a validated or statistically representative clinical benchmark.
+The current seed contains eight questions across easy, medium, and hard difficulty. It is an engineering seed, not a validated or statistically representative clinical benchmark.
 
 ## Evidence gate
 
-Every expected evidence item must eventually resolve to a real chunk in the controlled knowledge base.
+Every expected evidence item must resolve to a real chunk in the controlled knowledge base.
 
-The validator exposes two states:
+The current controlled corpus resolves all benchmark evidence mappings. Retrieval evaluation is therefore allowed for the current eight-question seed.
 
-- **Schema-valid:** question structure and values are valid.
-- **Evaluation-ready:** every expected evidence ID resolves to an available controlled chunk.
+## Controlled corpus
 
-The current seed intentionally uses DEFERRED_TO_CONTROLLED_CORPUS because V1 does not yet contain a frozen clinical corpus. This marker is always treated as unresolved.
-
-Retrieval metrics must not run against unresolved questions.
+The benchmark uses compact evidence snapshots from the World Health Organization and National Institute for Health and Care Excellence. Full copyrighted source documents are not stored.
 
 ## Evidence mapping rule
 
-Expected evidence should contain stable chunk_id values produced by the V1 preprocessing pipeline. Do not store free-text excerpts as the canonical identifier.
-
-When the controlled corpus is frozen:
-
-1. ingest authoritative documents;
-2. preprocess them into chunks;
-3. freeze the resulting chunk IDs;
-4. map each benchmark question to one or more supporting chunk IDs;
-5. run the evidence gate;
-6. only then use the benchmark for retrieval evaluation.
+Expected evidence uses stable chunk IDs produced by the V1 preprocessing pipeline. Changes to the controlled corpus that alter chunk IDs require remapping or a new benchmark version.
 
 ## Growth plan
 
-- Seed: 30–50 questions
+- Current seed: 8 questions
+- Next expansion: 30–50 questions
 - Target: 100–300 questions
-
-The benchmark should grow only after the evaluation pipeline and evidence mapping rules are stable.
 
 ## Freeze rule
 

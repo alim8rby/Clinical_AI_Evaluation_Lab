@@ -2,35 +2,21 @@
 
 **CAIEL** is a portfolio project for building and evaluating evidence-grounded clinical QA systems.
 
-The goal is not just to make a medical chatbot. The goal is to make it possible to see **where an AI answer came from, how reliable it is, and where it fails**.
+The goal is not just to make a medical chatbot. The goal is to see **where an AI answer came from, how reliable it is, and where it fails**.
 
 > Portfolio/research project. Not for patient care.
 
 ## Current status
 
-**V1 — Working RAG: FROZEN**
+**V2 — Evaluation Lab: FROZEN**
 
-The repository now contains a complete local RAG path:
+V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline plus a deterministic evaluation layer.
 
-```text
-Source document
-      ↓
-Ingestion
-      ↓
-Chunking
-      ↓
-Embeddings + vector index
-      ↓
-Retrieval
-      ↓
-Generation
-      ↓
-Citations
-```
+### What is built
 
-The implementation is intentionally local and deterministic at this stage. It uses a simple hashed-token embedding and a mock generation provider, so V1 is an engineering baseline rather than a clinically validated system.
+Source document → Ingestion → Chunking → Embeddings/vector index → Retrieval → Generation → Citations → ClinicalQA-v1 → Evaluation → Experiments → Comparison + Report
 
-## What V1 includes
+## V1 — Working RAG
 
 - Document ingestion and provenance
 - Deterministic document and chunk IDs
@@ -42,116 +28,97 @@ The implementation is intentionally local and deterministic at this stage. It us
 - Claim-level evidence references
 - Citation validation
 - End-to-end RAG pipeline
-- Unit tests
-- Integration and failure-path tests
+- Unit, integration, and failure-path tests
 
-The main traceability chain is:
+Traceability: Question → Evidence → Answer → Claim → Citation → Chunk → Document
 
-```text
-Question → Evidence → Answer → Claim → Citation → Chunk → Document
-```
+## V2 — Evaluation Lab
 
-## Example flow
+### Benchmark
 
-A question enters the RAG pipeline, evidence is retrieved from the indexed documents, an answer is generated from that evidence, and the citation layer checks that every claim points to retrieved evidence.
+- ClinicalQA-v1
+- Depression only
+- Current seed: 8 questions
+- Controlled evidence mappings to stable chunk IDs
+- Planned growth: 30–50 questions, then 100–300
 
-This gives the project a clear base for the next step: measuring reliability rather than only generating answers.
+### Metrics
 
-## Evaluation plan
+Retrieval: Precision@K, Recall@K, MRR, nDCG.
 
-V2 will add the actual evaluation lab:
+Answer quality: Correctness, Completeness, Relevance.
 
-- ClinicalQA-v1 benchmark
-- Retrieval metrics
-- Answer quality metrics
-- Grounding and citation evaluation
-- Experiment tracking
-- Model/retriever/prompt comparisons
+Grounding: Citation coverage, Citation validity, Faithfulness, Unsupported claim rate.
 
-Later phases will add failure analysis, API/database infrastructure, monitoring, and deployment.
+Reliability: Hallucination proxy, Critical-error signal, Uncertainty handling, Unsupported recommendation rate.
 
-## Known limitations
+### Experiments and reports
 
-V1 is deliberately small.
+Experiments record model, embedding, retriever, top-k, prompt, benchmark, and run metadata. Same-benchmark comparisons expose metric deltas and sample counts with no hidden composite score.
 
-- The embedding model is a deterministic hashed-token baseline.
-- The generation provider is a local mock.
-- The vector index is JSON-backed.
-- No real clinical corpus is included yet.
-- Citation validation checks references, not whether evidence truly supports a claim.
-- No automated clinical evaluation exists yet.
-- No API, database, frontend, or deployment exists yet.
+Reports contain experiment identity, benchmark, configuration, sample count, aggregated metrics, and recorded failures.
 
-These are planned work, not hidden capabilities.
+## V2 audit result
 
-## Project structure
+**V2.0–V2.9: COMPLETE AND FROZEN**
 
-```text
-app/                  Application layer
-src/
-  ingestion/          Document ingestion
-  preprocessing/      Chunking
-  retrieval/          Embeddings and retrieval
-  generation/         Answer generation and citations
-  evaluation/         Future evaluation layer
-  experiments/        Future experiment layer
-  failure_analysis/   Future failure analysis
-  monitoring/         Future monitoring
+The audit repaired the benchmark evidence documentation and added failure retention to ExperimentResult so failures flow directly into reports.
 
-data/
-  raw/
-  processed/
-  benchmark/
-  results/
+See docs/methodology/v2-audit.md for the freeze record and limitations.
 
-tests/
-  unit/
-  integration/
-  retrieval/
-  evaluation/
+## What is still in progress
 
-docs/
-  architecture/
-  methodology/
-  experiments/
-  safety/
-```
+### V3 — Failure Observatory — IN PROGRESS
+
+- Failure classification and persistence
+- Failure analysis workflows
+- Failure Observatory UI
+- Regression testing around known failures
+
+### V4 — Productionization — PLANNED
+
+- FastAPI
+- PostgreSQL + pgvector
+- Structured persistence
+- Logging and monitoring
+- Docker
+- Deployment
+- CI/CD
+
+### V5 — Healthcare interoperability — PLANNED
+
+- FHIR
+- Provenance
+- Structured clinical data
+- Human-in-the-loop workflows
+
+## Important limitations
+
+- Benchmark has only eight questions.
+- Controlled corpus is compact.
+- Answer and grounding evaluation use token-overlap baselines.
+- Reliability signals are heuristic.
+- No production persistence or UI exists yet.
+- No real patient data or autonomous clinical decision-making.
+- Local RAG still uses deterministic hashed-token embeddings and a mock generation provider.
+- No clinical validation is claimed.
 
 ## Documentation
 
-Start with:
-
-- `docs/product-spec.md` — product definition
-- `docs/roadmap.md` — development roadmap
-- `docs/data-model.md` — core data model
-- `docs/failure-taxonomy.md` — failure taxonomy
-- `docs/architecture/` — system and module contracts
-- `docs/methodology/` — V1 implementation notes
-- `docs/methodology/v1-audit.md` — V1 audit and freeze record
-
-## Roadmap
-
-| Phase | Status | Main goal |
-|---|---|---|
-| V0 | FROZEN | Architecture and contracts |
-| V1 | FROZEN | Working local RAG |
-| V2 | Next | Evaluation and experiments |
-| V3 | Planned | Failure Observatory |
-| V4 | Planned | Productionization |
-| V5 | Planned | Healthcare interoperability |
-
-## Scope
-
-The project is intentionally limited.
-
-It does not currently include real patient data, autonomous clinical decisions, EHR integration, mobile/voice interfaces, fine-tuning, multi-agent systems, multiple medical domains, or Kubernetes.
+- docs/product-spec.md — product definition
+- docs/roadmap.md — roadmap and phase status
+- docs/data-model.md — core data model
+- docs/failure-taxonomy.md — failure taxonomy
+- docs/architecture/ — architecture and contracts
+- docs/methodology/ — implementation methodology and audits
+- docs/methodology/v2-audit.md — V2 freeze record
 
 ## Tech direction
 
 Python · FastAPI · PostgreSQL · pgvector · LLM provider abstraction · Docker · pytest
 
-The stack will be introduced as the corresponding phases are implemented.
+Production infrastructure is introduced in later phases. V2 remains deliberately local and deterministic.
 
 ## License
 
-Project license and contribution guidance will be added before the public release.
+Project license and contribution guidance will be added before public release.

@@ -2,57 +2,45 @@
 
 ## V0 — Architecture — FROZEN
 
-Completed:
-
-1. Repository Architecture
-2. Core Data Model
-3. Module Contracts
-4. API Contract
-5. Configuration & Environment
-6. V0 Audit & Freeze
-
-V0 defines the product boundary and technical contracts.
+Completed: repository architecture, core data model, module contracts, API contract, configuration, audit and freeze.
 
 ## V1 — Working RAG — FROZEN
 
+Completed: ingestion, preprocessing, embeddings/vector index, retrieval, generation boundary, citations, end-to-end RAG, integration/failure-path tests, audit and freeze.
+
+## V2 — Evaluation Lab — FROZEN
+
 Completed:
+1. Evaluation architecture
+2. ClinicalQA-v1 benchmark and controlled evidence corpus
+3. Retrieval evaluation
+4. Answer evaluation
+5. Grounding and citation evaluation
+6. Reliability evaluation
+7. Experiment tracking
+8. Experiment comparison
+9. Reproducible evaluation reports
+10. V2 audit and freeze
 
-1. Document ingestion
-2. Preprocessing and chunking
-3. Embeddings and local vector index
-4. Retrieval
-5. Generation boundary and deterministic mock provider
-6. Citation and traceability
-7. End-to-end RAG pipeline
-8. Integration and failure-path tests
-9. V1 audit and freeze
+V2 is a deterministic engineering evaluation baseline, not a clinically validated benchmark or safety classifier.
 
-V1 is an executable local RAG baseline. It is not yet a clinically validated system.
+## V3 — Failure Observatory — IN PROGRESS
 
-## V2 — Evaluation Lab
+- Failure classification and persistence
+- Failure analysis workflows
+- Failure Observatory UI
+- Regression testing around known failures
 
-- ClinicalQA-v1 benchmark
-- Evaluation pipeline
-- Experiment tracking
-- Comparisons
+## V4 — Productionization — PLANNED
 
-## V3 — Failure Observatory
-
-- Failure classification
-- Failure analysis UI
-- Regression testing
-
-## V4 — Productionization
-
-- API
-- Database
-- Logging
-- Monitoring
-- Docker
-- Deployment
+- FastAPI implementation
+- PostgreSQL and pgvector
+- Structured persistence
+- Logging and monitoring
+- Docker and deployment
 - CI/CD
 
-## V5 — Healthcare interoperability
+## V5 — Healthcare interoperability — PLANNED
 
 - FHIR
 - Provenance
