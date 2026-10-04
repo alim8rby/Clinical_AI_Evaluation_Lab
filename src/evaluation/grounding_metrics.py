@@ -13,6 +13,8 @@ class GroundingMetrics:
     citation_validity: float
     faithfulness: float
     unsupported_claim_rate: float
+    semantic_faithfulness: float | None = None
+    semantic_unsupported_claim_rate: float | None = None
 
 
 def _tokens(text: str) -> set[str]:
