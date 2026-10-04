@@ -121,6 +121,10 @@ class ApiServices:
             self._failure_observatory = DatabaseFailureObservatory(self.session)
         return self._failure_observatory
 
+    @observatory.setter
+    def observatory(self, value):
+        self._failure_observatory = value
+
 
 def _load_controlled_documents():
     root = Path(__file__).resolve().parents[2]
