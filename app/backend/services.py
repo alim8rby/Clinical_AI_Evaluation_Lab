@@ -14,7 +14,6 @@ from src.ingestion.models import SourceDocument
 from src.pipeline import ClinicalRAG, RAGResult
 from src.preprocessing import chunk_document
 from src.retrieval import (
-    LocalHashedEmbeddingProvider,
     OllamaEmbeddingProvider,
     PgVectorRetriever,
     VectorIndex,
