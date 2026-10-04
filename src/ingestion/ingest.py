@@ -25,6 +25,7 @@ def _required(value: str, field: str) -> str:
 def _normalize_content(content: str) -> str:
     content = content.replace("\r\n", "\n").replace("\r", "\n")
     content = re.sub(r"[ \t]+", " ", content)
+    content = re.sub(r"[ \t]+\n", "\n", content)
     content = re.sub(r"\n{3,}", "\n\n", content)
     return content.strip()
 
