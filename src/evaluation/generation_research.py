@@ -10,7 +10,7 @@ from src.evaluation.answer import evaluate_question_answer
 from src.evaluation.benchmark_v2 import BenchmarkV2Question
 from src.evaluation.grounding import evaluate_answer_grounding
 from src.evaluation.reliability import evaluate_answer_reliability
-from src.generation.citations import build_citations
+from src.generation.citations import Citation
 from src.generation.models import Answer
 from src.retrieval.search import EvidenceSet
 
@@ -74,7 +74,21 @@ def evaluate_generation_case(
     usage = getattr(provider, "last_usage", {})
 
     resolved_answer_id = answer_id or f"generation_{question.question_id}_{provider.model}"
-    citations = build_citations(answer, evidence, answer_id=resolved_answer_id)
+    citations = []
+    for claim_index, claim in enumerate(answer.claims, start=1):
+        for citation_index in claim.citation_indices:
+            if citation_index < 1 or citation_index > len(evidence.evidence):
+                raise ValueError("generated citation index is outside the evidence set")
+            chunk = evidence.evidence[citation_index - 1].chunk
+            citations.append(
+                Citation(
+                    citation_id=f"{resolved_answer_id}-c{claim_index}-e{citation_index}",
+                    answer_id=resolved_answer_id,
+                    claim_index=claim_index,
+                    chunk_id=chunk.chunk_id,
+                    citation_text=chunk.chunk_id,
+                )
+            )
     answer_eval = evaluate_question_answer(question, answer, semantic_evaluator)
     grounding_eval = evaluate_answer_grounding(
         resolved_answer_id, answer, citations, evidence, semantic_evaluator
