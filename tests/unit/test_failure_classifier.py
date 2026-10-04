@@ -30,7 +30,7 @@ class FailureClassifierTests(unittest.TestCase):
         result = ExperimentResult(
             run=self.run,
             retrieval=RetrievalEvaluation(
-                "cq-001", RetrievalMetrics(0.0, 0.0, 0.0, 0.0, 5, 1),
+                "cq-001", RetrievalMetrics(0.0, 0.0, 0.0, 0.0, 5, 1, 1),
                 ["chunk-2"], ["chunk-1"]
             ),
             grounding=GroundingEvaluation(
