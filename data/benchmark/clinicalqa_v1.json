@@ -1,74 +1,10 @@
 [
-  {
-    "question_id": "cq-001",
-    "question": "What clinical features are central to diagnosing a depressive episode?",
-    "domain": "depression",
-    "difficulty": "easy",
-    "expected_evidence": ["DEFERRED_TO_CONTROLLED_CORPUS"],
-    "reference_answer": "A depressive episode is identified from a characteristic cluster of depressive symptoms, including depressed mood or loss of interest or pleasure, together with associated symptoms, persistence, and clinically meaningful distress or impairment as defined by the applicable diagnostic framework.",
-    "key_concepts": ["depressed mood", "loss of interest or pleasure", "associated symptoms", "duration", "functional impairment"]
-  },
-  {
-    "question_id": "cq-002",
-    "question": "How should suicide risk be considered when assessing a patient with depression?",
-    "domain": "depression",
-    "difficulty": "medium",
-    "expected_evidence": ["DEFERRED_TO_CONTROLLED_CORPUS"],
-    "reference_answer": "Suicide risk should be assessed explicitly as part of a clinical assessment of depression, including current suicidal thoughts, intent, planning, access to means, previous suicidal behaviour, and relevant protective factors, with the response matched to the level of risk.",
-    "key_concepts": ["suicidal thoughts", "intent", "planning", "previous suicidal behaviour", "protective factors", "risk management"]
-  },
-  {
-    "question_id": "cq-003",
-    "question": "What factors should be considered when choosing treatment for depression?",
-    "domain": "depression",
-    "difficulty": "medium",
-    "expected_evidence": ["DEFERRED_TO_CONTROLLED_CORPUS"],
-    "reference_answer": "Treatment selection should consider symptom severity, patient preference, previous treatment response, comorbidity, risks and benefits, availability, and the person's clinical and social circumstances.",
-    "key_concepts": ["severity", "patient preference", "previous response", "comorbidity", "risks and benefits", "clinical circumstances"]
-  },
-  {
-    "question_id": "cq-004",
-    "question": "Why is follow-up important after starting treatment for depression?",
-    "domain": "depression",
-    "difficulty": "easy",
-    "expected_evidence": ["DEFERRED_TO_CONTROLLED_CORPUS"],
-    "reference_answer": "Follow-up helps assess response and adverse effects, review adherence and emerging risks, and adjust treatment when needed. The timing should reflect the treatment, clinical circumstances, and level of risk.",
-    "key_concepts": ["treatment response", "adverse effects", "adherence", "risk review", "treatment adjustment"]
-  },
-  {
-    "question_id": "cq-005",
-    "question": "What is the role of psychological treatment in depression?",
-    "domain": "depression",
-    "difficulty": "medium",
-    "expected_evidence": ["DEFERRED_TO_CONTROLLED_CORPUS"],
-    "reference_answer": "Evidence-based psychological treatments are established treatment options for depression. The choice depends on the clinical presentation, patient preference, availability, and the relevant treatment guideline.",
-    "key_concepts": ["psychological treatment", "evidence-based treatment", "patient preference", "clinical presentation"]
-  },
-  {
-    "question_id": "cq-006",
-    "question": "What should be reviewed when a patient with depression has not improved with treatment?",
-    "domain": "depression",
-    "difficulty": "hard",
-    "expected_evidence": ["DEFERRED_TO_CONTROLLED_CORPUS"],
-    "reference_answer": "Non-response should prompt a structured review of the diagnosis and comorbidities, treatment adherence and adequacy, adverse effects, psychosocial factors, and the possibility of an alternative or additional treatment strategy based on the relevant guideline.",
-    "key_concepts": ["diagnostic review", "comorbidity", "adherence", "adequacy of treatment", "psychosocial factors", "alternative treatment"]
-  },
-  {
-    "question_id": "cq-007",
-    "question": "What is the purpose of maintenance treatment after recovery from depression?",
-    "domain": "depression",
-    "difficulty": "hard",
-    "expected_evidence": ["DEFERRED_TO_CONTROLLED_CORPUS"],
-    "reference_answer": "Maintenance treatment may be used to reduce the risk of relapse in people for whom continued treatment is indicated. The decision should consider previous episodes, relapse risk, treatment response, preferences, and the balance of benefits and harms.",
-    "key_concepts": ["relapse prevention", "previous episodes", "relapse risk", "benefits and harms", "shared decision-making"]
-  },
-  {
-    "question_id": "cq-008",
-    "question": "How can clinicians distinguish treatment-emergent problems from expected early changes when treating depression?",
-    "domain": "depression",
-    "difficulty": "hard",
-    "expected_evidence": ["DEFERRED_TO_CONTROLLED_CORPUS"],
-    "reference_answer": "Early follow-up should review symptom trajectory, adverse effects, activation or worsening symptoms, adherence, and safety. Interpretation should be based on the treatment used and the patient's clinical context rather than assuming that every early change represents improvement or deterioration.",
-    "key_concepts": ["symptom trajectory", "adverse effects", "activation", "safety", "clinical context"]
-  }
+  {"question_id":"cq-001","question":"What clinical features are central to diagnosing a depressive episode?","domain":"depression","difficulty":"easy","expected_evidence":["chunk_8cdc380723ba4f0c"],"reference_answer":"A depressive episode is identified from a characteristic cluster of depressive symptoms, including depressed mood or loss of interest or pleasure, together with associated symptoms, persistence, and clinically meaningful distress or impairment as defined by the applicable diagnostic framework.","key_concepts":["depressed mood","loss of interest or pleasure","associated symptoms","duration","functional impairment"]},
+  {"question_id":"cq-002","question":"How should suicide risk be considered when assessing a patient with depression?","domain":"depression","difficulty":"medium","expected_evidence":["chunk_75092e03f18cfb22"],"reference_answer":"Suicide risk should be assessed explicitly as part of a clinical assessment of depression, including current suicidal thoughts, intent, planning, access to means, previous suicidal behaviour, and relevant protective factors, with the response matched to the level of risk.","key_concepts":["suicidal thoughts","intent","planning","previous suicidal behaviour","protective factors","risk management"]},
+  {"question_id":"cq-003","question":"What factors should be considered when choosing treatment for depression?","domain":"depression","difficulty":"medium","expected_evidence":["chunk_0b161e000d97f624"],"reference_answer":"Treatment selection should consider symptom severity, patient preference, previous treatment response, comorbidity, risks and benefits, availability, and the person's clinical and social circumstances.","key_concepts":["severity","patient preference","previous response","comorbidity","risks and benefits","clinical circumstances"]},
+  {"question_id":"cq-004","question":"Why is follow-up important after starting treatment for depression?","domain":"depression","difficulty":"easy","expected_evidence":["chunk_4492f3fed67d11ff"],"reference_answer":"Follow-up helps assess response and adverse effects, review adherence and emerging risks, and adjust treatment when needed. The timing should reflect the treatment, clinical circumstances, and level of risk.","key_concepts":["treatment response","adverse effects","adherence","risk review","treatment adjustment"]},
+  {"question_id":"cq-005","question":"What is the role of psychological treatment in depression?","domain":"depression","difficulty":"medium","expected_evidence":["chunk_9a1d40e76f9ce39f"],"reference_answer":"Evidence-based psychological treatments are established treatment options for depression. The choice depends on the clinical presentation, patient preference, availability, and the relevant treatment guideline.","key_concepts":["psychological treatment","evidence-based treatment","patient preference","clinical presentation"]},
+  {"question_id":"cq-006","question":"What should be reviewed when a patient with depression has not improved with treatment?","domain":"depression","difficulty":"hard","expected_evidence":["chunk_fc1b23978839cab5"],"reference_answer":"Non-response should prompt a structured review of the diagnosis and comorbidities, treatment adherence and adequacy, adverse effects, psychosocial factors, and the possibility of an alternative or additional treatment strategy based on the relevant guideline.","key_concepts":["diagnostic review","comorbidity","adherence","adequacy of treatment","psychosocial factors","alternative treatment"]},
+  {"question_id":"cq-007","question":"What is the purpose of maintenance treatment after recovery from depression?","domain":"depression","difficulty":"hard","expected_evidence":["chunk_76d79d3e08d6782d"],"reference_answer":"Maintenance treatment may be used to reduce the risk of relapse in people for whom continued treatment is indicated. The decision should consider previous episodes, relapse risk, treatment response, preferences, and the balance of benefits and harms.","key_concepts":["relapse prevention","previous episodes","relapse risk","benefits and harms","shared decision-making"]},
+  {"question_id":"cq-008","question":"How can clinicians distinguish treatment-emergent problems from expected early changes when treating depression?","domain":"depression","difficulty":"hard","expected_evidence":["chunk_2463f3d3f087914f"],"reference_answer":"Early follow-up should review symptom trajectory, adverse effects, activation or worsening symptoms, adherence, and safety. Interpretation should be based on the treatment used and the patient's clinical context rather than assuming that every early change represents improvement or deterioration.","key_concepts":["symptom trajectory","adverse effects","activation","safety","clinical context"]}
 ]
