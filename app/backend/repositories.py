@@ -89,10 +89,12 @@ class ChunkEmbeddingRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def save_many(self, chunks, embeddings):
+    def save_many(self, chunks, embeddings, *, column: str = "embedding"):
         if len(chunks) != len(embeddings):
             raise ValueError("chunks and embeddings must have the same length")
         from sqlalchemy import text
+        if not column.replace("_", "").isalnum():
+            raise ValueError("invalid embedding column")
 
         for chunk, embedding in zip(chunks, embeddings):
             vector_literal = "[" + ",".join(str(float(value)) for value in embedding) + "]"
