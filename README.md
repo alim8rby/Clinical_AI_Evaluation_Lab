@@ -8,7 +8,7 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V4.11 — V4 Hardening: COMPLETE AND FROZEN**
+**V4.12 — V4 Hardening: COMPLETE AND FROZEN**
 
 V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
@@ -79,7 +79,7 @@ See docs/methodology/v3-audit.md for the V3 freeze record.
 
 ### V4 — Productionization
 
-V4.0–V4.10 are complete and frozen. The application has a FastAPI boundary, PostgreSQL persistence, pgvector retrieval, Ollama provider integration, evaluation/failure runtime, observability, an API-backed frontend, containers, and CI/CD.
+V4.0–V4.10 productionization is frozen; V4.11–V4.12 hardening is also frozen. The application has a FastAPI boundary, PostgreSQL persistence, pgvector retrieval, Ollama provider integration, evaluation/failure runtime, observability, an API-backed frontend, containers, and CI/CD.
 
 ### V5 — Healthcare interoperability — PLANNED
 
@@ -111,6 +111,7 @@ V4.0–V4.10 are complete and frozen. The application has a FastAPI boundary, Po
 - docs/methodology/v3-audit.md — V3 freeze record
 - docs/methodology/v4.10-audit.md — V4 productionization freeze record
 - docs/methodology/v4.11-semantic-embeddings.md — semantic embedding hardening
+- docs/methodology/v4.12-semantic-evaluation.md — semantic evaluation hardening
 
 ## Tech direction
 
