@@ -28,8 +28,8 @@ Completed: FastAPI implementation, PostgreSQL and pgvector, structured persisten
 
 See `docs/roadmap-v5.md`.
 
-Current phase: **V5.4 — Generation Evaluation Layer — NEXT**.
+Current phase: **V5.5 — Experiment Engine — NEXT**.
 
-V5.3 retrieval research engineering is complete: dense, BM25, and hybrid strategies now share a controlled comparison layer.
+V5.3 retrieval research and V5.4 generation evaluation engineering are complete, with controlled comparison layers and no empirical performance claims without executed experiments.
 
 V5.1 engineering is frozen; human calibration labels remain optional and pending.
