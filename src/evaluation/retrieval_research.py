@@ -145,3 +145,34 @@ def build_research_retrievers(
         "bm25": BM25Retriever(chunks),
         "hybrid": HybridRetriever(chunks, alpha=hybrid_alpha),
     }
+
+
+@dataclass(frozen=True)
+class RetrievalResearchReport:
+    benchmark_version: str
+    top_k: int
+    summaries: tuple[RetrievalStrategySummary, ...]
+
+
+def compare_retrieval_strategies(
+    questions: list[BenchmarkV2Question],
+    retrievers: dict[str, ResearchRetriever],
+    *,
+    benchmark_version: str,
+    top_k: int = 5,
+) -> RetrievalResearchReport:
+    if not benchmark_version.strip():
+        raise ValueError("benchmark_version must not be empty")
+    if not retrievers:
+        raise ValueError("retrievers must not be empty")
+    summaries = []
+    for strategy, retriever in sorted(retrievers.items()):
+        results = evaluate_retrieval_strategy(
+            questions, retriever, strategy=strategy, top_k=top_k
+        )
+        summaries.append(summarize_retrieval_results(results))
+    return RetrievalResearchReport(
+        benchmark_version=benchmark_version,
+        top_k=top_k,
+        summaries=tuple(summaries),
+    )
