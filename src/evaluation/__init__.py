@@ -23,3 +23,5 @@ __all__ = [
     "evaluate_answer_reliability",
     "EvaluationReport", "build_report", "render_markdown",
 ]
+
+from .retrieval_challenge import RetrievalChallenge, validate_challenge_payload
