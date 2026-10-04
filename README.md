@@ -8,7 +8,7 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V5.2 — Benchmark v2: IN PROGRESS**
+**V5.3 — Retrieval Research Layer: NEXT**
 
 V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
@@ -83,9 +83,9 @@ V4.0–V4.15 is frozen. The application has a FastAPI boundary, PostgreSQL persi
 
 ### V5 — Evaluation Platform
 
-V5.1 engineering is frozen with a human-calibration framework and explicit annotation rubric. V5.2 is expanding the benchmark with versioned question metadata while preserving ClinicalQA-v1 as an immutable baseline.
+V5.1 engineering is frozen with a human-calibration framework and explicit annotation rubric. V5.2 is frozen with a 60-question ClinicalQA-v2 benchmark while preserving ClinicalQA-v1 as an immutable baseline.
 
-See docs/methodology/v5.1-calibration.md, docs/methodology/v5.1-annotation-rubric.md, docs/methodology/v5.1-audit.md, and docs/methodology/v5.2-benchmark.md.
+See docs/methodology/v5.1-calibration.md, docs/methodology/v5.1-annotation-rubric.md, docs/methodology/v5.1-audit.md, docs/methodology/v5.2-benchmark.md, and docs/methodology/v5.2-audit.md.
 
 ## Important limitations
 
