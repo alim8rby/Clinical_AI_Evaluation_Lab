@@ -16,7 +16,6 @@ from src.retrieval import (
     LocalHashedEmbeddingProvider,
     PgVectorRetriever,
     VectorIndex,
-    retrieve,
 )
 
 
