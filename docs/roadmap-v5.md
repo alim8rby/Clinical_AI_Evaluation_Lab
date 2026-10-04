@@ -32,10 +32,16 @@ V5 upgrades CAIEL from a productionized clinical RAG demo into a stronger evalua
 
 Empirical benchmark runs remain environment-dependent and should not be represented as completed results until executed.
 
-## V5.4 — Generation Evaluation Layer — PLANNED
-- Controlled multi-model experiments
-- Consistent evidence and benchmark conditions
+## V5.4 — Generation Evaluation Layer — ENGINEERING COMPLETE
+- Controlled generation-provider experiments
+- Fixed benchmark and evidence conditions
 - Quality, grounding, reliability, latency, token, and cost comparisons
+- Question-level result retention
+- Cross-provider summaries
+- No hidden composite score
+- Methodology and audit completed
+
+Empirical model-performance results remain pending an executed controlled benchmark run.
 
 ## V5.5 — Experiment Engine — PLANNED
 - Reproducible batch benchmark runs
