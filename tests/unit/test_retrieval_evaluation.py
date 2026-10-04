@@ -2,7 +2,7 @@ import unittest
 
 from src.evaluation.benchmark import BenchmarkQuestion
 from src.evaluation.retrieval import evaluate_question_retrieval
-from src.retrieval.models import Chunk
+from src.preprocessing.models import Chunk
 from src.retrieval.search import Evidence, EvidenceSet
 
 
