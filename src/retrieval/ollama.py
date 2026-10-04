@@ -1,10 +1,17 @@
 from __future__ import annotations
+
 import httpx
 
-class OllamaEmbeddingProvider:
-    """Local Ollama embedding provider."""
 
-    def __init__(self, model: str = "nomic-embed-text", base_url: str = "http://127.0.0.1:11434", timeout: float = 30.0):
+class OllamaEmbeddingProvider:
+    """Local Ollama semantic embedding provider."""
+
+    def __init__(
+        self,
+        model: str = "nomic-embed-text",
+        base_url: str = "http://127.0.0.1:11434",
+        timeout: float = 30.0,
+    ):
         self.model = model
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
