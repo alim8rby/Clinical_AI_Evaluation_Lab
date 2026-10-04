@@ -8,6 +8,7 @@ import json
 from src.evaluation.answer import evaluate_question_answer
 from src.evaluation.grounding import evaluate_answer_grounding
 from src.evaluation.reliability import evaluate_answer_reliability
+from src.evaluation.ollama_semantic import OllamaSemanticEvaluator
 from src.evaluation.retrieval import evaluate_question_retrieval
 from src.evaluation.benchmark import BenchmarkQuestion
 from src.experiments.models import Experiment, ExperimentResult, RunRecord
@@ -27,8 +28,9 @@ class RuntimeResult:
 class EvaluationRuntime:
     """Orchestrates frozen domain modules and V4 persistence adapters."""
 
-    def __init__(self, session, rag: ClinicalRAG):
+    def __init__(self, session, rag: ClinicalRAG, semantic_evaluator=None):
         self.rag = rag
+        self.semantic_evaluator = semantic_evaluator
         self.experiments = ExperimentRepository(session)
         self.runs = RunRepository(session)
         self.answers = AnswerRepository(session)
@@ -50,8 +52,8 @@ class EvaluationRuntime:
         try:
             rag_result = self.rag.ask(question.question, top_k=experiment.config.top_k, answer_id=answer_id, prompt_version=experiment.config.prompt_version)
             retrieval = evaluate_question_retrieval(question, rag_result.evidence, k=experiment.config.top_k)
-            answer_eval = evaluate_question_answer(question, rag_result.answer)
-            grounding = evaluate_answer_grounding(answer_id, rag_result.answer, rag_result.citations, rag_result.evidence)
+            answer_eval = evaluate_question_answer(question, rag_result.answer, self.semantic_evaluator)
+            grounding = evaluate_answer_grounding(answer_id, rag_result.answer, rag_result.citations, rag_result.evidence, self.semantic_evaluator)
             reliability = evaluate_answer_reliability(answer_id, rag_result.answer, grounding.metrics)
             usage = getattr(self.rag.generator, "last_usage", {})
             finished = datetime.now(timezone.utc).replace(tzinfo=None)
