@@ -11,11 +11,14 @@ V5 upgrades CAIEL from a productionized clinical RAG demo into a stronger evalua
 - Production evaluator behavior unchanged
 - Human-reviewed labels remain a manual research step
 
-## V5.2 — Benchmark v2 — PLANNED
-- Expand ClinicalQA-v1 beyond the current 40 questions
-- Broaden question and difficulty coverage
-- Add stronger multi-evidence and safety-sensitive cases
-- Preserve stable evidence provenance
+## V5.2 — Benchmark v2 — IN PROGRESS
+- Separate versioned ClinicalQA-v2 contract — COMPLETE
+- Initial 20-question expansion — COMPLETE
+- Explicit question-type metadata — COMPLETE
+- Explicit safety-relevance metadata — COMPLETE
+- Controlled-corpus evidence validation — COMPLETE
+- Combine and audit the v1 baseline plus v2 expansion — NEXT
+- Freeze the resulting benchmark version — PENDING
 
 ## V5.3 — Retrieval Research Layer — PLANNED
 - Dense, BM25, and hybrid retrieval comparisons
