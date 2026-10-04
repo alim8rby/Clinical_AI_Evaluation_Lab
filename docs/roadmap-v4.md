@@ -1,103 +1,31 @@
 # V4 Roadmap — Productionization
 
-## Goal
+V4.0–V4.10 are complete and frozen. The repository then entered a bounded **V4 Hardening** phase to address known methodological limitations without redefining V1–V3 domain contracts.
 
-Turn the frozen V1–V3 local system into a deployable application without changing the frozen domain contracts.
+## V4.0–V4.10 — COMPLETE AND FROZEN
+Production API, persistence, pgvector retrieval, provider integration, evaluation/failure runtime, observability, frontend, containers, CI/CD, and final audit.
 
-## Scope
+## V4 Hardening
 
-V4 is infrastructure and application delivery. It does not redefine RAG semantics, evaluation metrics, failure taxonomy, failure severity rules, or benchmark semantics.
+### V4.11 — Semantic Embeddings — COMPLETE AND FROZEN
+- Ollama `nomic-embed-text` production embedding provider
+- dedicated semantic pgvector column
+- semantic HNSW index
+- controlled-corpus re-indexing path
+- deterministic hashed baseline retained
 
-## V4.0 — Production API Foundation — COMPLETE AND FROZEN
-- FastAPI application
-- /api/v1 route boundary
-- health endpoint
-- structured error contract
-- dependency/configuration boundary
-- API tests
+### V4.12 — Semantic Answer & Grounding Evaluation — NEXT
+- model-assisted semantic evaluation behind provider boundaries
+- deterministic lexical metrics retained as baselines
+- evaluator version/configuration recorded
+- calibration and regression coverage
 
-## V4.1 — API Domain Adapters — COMPLETE AND FROZEN
-- QA endpoint
-- experiment endpoints
-- comparison endpoint
-- run/evidence endpoints
-- failure Observatory endpoints
-- Pydantic request/response models
-- domain-to-API mapping
-
-## V4.2 — PostgreSQL Persistence — COMPLETE AND FROZEN
-- SQLAlchemy persistence boundary
-- database models for core entities
-- migrations
-- repository interfaces
-- replace local JSON persistence where appropriate
-
-## V4.3 — pgvector Retrieval — COMPLETE AND FROZEN
-- production embedding provider boundary
-- PostgreSQL/pgvector index
-- document/chunk ingestion persistence
-- retrieval repository
-- preserve chunk provenance
-
-## V4.4 — Real LLM Provider Integration — COMPLETE AND FROZEN
-- provider abstraction implementation
-- configurable model selection
-- structured generation output
-- timeout/error handling
-- provider-neutral domain contracts
-
-## V4.5 — Evaluation/Failure Runtime — COMPLETE AND FROZEN
-- execute benchmark runs through the application
-- persist evaluation results
-- persist failures
-- experiment execution
-- comparison/report access
-
-## V4.6 — Observability — COMPLETE AND FROZEN
-- structured logging
-- request/run correlation IDs
-- latency/token/cost tracking
-- application metrics
-- failure logging
-- health/readiness checks
-
-## V4.7 — Frontend Integration — COMPLETE AND FROZEN
-- replace V3 demo fixture with API data
-- connect QA workflow
-- connect Observatory
-- experiment and comparison views
-- evidence/traceability views
-
-## V4.8 — Containerization & Local Deployment — COMPLETE AND FROZEN
-- Dockerfile
-- production compose setup
-- environment configuration
-- database initialization
-- health checks
-
-## V4.9 — CI/CD & Deployment — COMPLETE AND FROZEN
-- automated test pipeline
-- lint/type checks
-- image build
-- deployment configuration
-- production secrets boundary
-
-## V4.10 — V4 Audit & Freeze — COMPLETE AND FROZEN
-- API contract audit
-- persistence audit
-- retrieval audit
-- provider audit
-- observability audit
-- security/configuration audit
-- deployment audit
-- V1–V3 compatibility audit
-- documentation
-- freeze
+### V4.13 — Benchmark Expansion — PLANNED
+### V4.14 — Retrieval & Evaluation Challenge Set — PLANNED
+### V4.15 — Failure Classifier Upgrade & Hardening Freeze — PLANNED
 
 ## Explicit exclusions
 
-V4 does not include FHIR, real patient data, autonomous clinical decisions, additional clinical domains, fine-tuning, multi-agent architecture, Kubernetes unless later justified, or complex authentication before the application requires it.
+The hardening phase does not add FHIR, real patient data, autonomous clinical decisions, additional clinical domains, fine-tuning, multi-agent architecture, Kubernetes, or complex authentication.
 
-## Definition of done
-
-V4 is complete when the frozen CAIEL domain can run behind a real API, persist its core data in PostgreSQL, perform production-style retrieval and generation through provider boundaries, expose evaluation/failure workflows, serve the UI from real data, emit operational telemetry, and run reproducibly through containers and CI/CD.
+V5 remains a separate future phase.
