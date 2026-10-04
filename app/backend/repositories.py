@@ -85,6 +85,27 @@ class ChunkRepository:
         return [Chunk(r.chunk_id,r.document_id,r.text,r.section,r.page,r.chunk_index) for r in rows]
 
 
+class ChunkEmbeddingRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def save_many(self, chunks, embeddings):
+        if len(chunks) != len(embeddings):
+            raise ValueError("chunks and embeddings must have the same length")
+        from sqlalchemy import text
+
+        for chunk, embedding in zip(chunks, embeddings):
+            vector_literal = "[" + ",".join(str(float(value)) for value in embedding) + "]"
+            self.session.execute(
+                text(
+                    "UPDATE chunks SET embedding = CAST(:embedding AS vector) "
+                    "WHERE chunk_id = :chunk_id"
+                ),
+                {"embedding": vector_literal, "chunk_id": chunk.chunk_id},
+            )
+        self.session.commit()
+
+
 class EvaluationAnalysisRepository:
     def __init__(self, session): self.session=session
 
