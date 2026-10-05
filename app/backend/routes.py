@@ -56,6 +56,13 @@ def create_experiment(request:ExperimentCreateRequest):
     finally: session.close()
     return ExperimentResponse.from_domain(experiment)
 
+@router.get("/experiments",response_model=ExperimentListResponse)
+def list_experiments():
+    session=services.session()
+    try:
+        return ExperimentListResponse(experiments=[ExperimentResponse.from_domain(item) for item in services.runtime(session).experiments.list()])
+    finally: session.close()
+
 @router.get("/experiments/{experiment_id}",response_model=ExperimentResponse)
 def get_experiment(experiment_id:str):
     session=services.session()
