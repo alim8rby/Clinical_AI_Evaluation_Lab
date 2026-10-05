@@ -328,6 +328,15 @@ class EvaluationAnalysisRepository:
             select(RunRow.run_id).where(RunRow.experiment_id==experiment_id, RunRow.status=="completed")
         ).all())
 
+    def failures_for_experiment(self, experiment_id):
+        rows = self.session.execute(
+            select(FailureRow)
+            .join(RunRow, RunRow.run_id == FailureRow.run_id)
+            .where(RunRow.experiment_id == experiment_id)
+            .order_by(FailureRow.failure_id)
+        ).scalars().all()
+        return [FailureRepository._to_domain(row) for row in rows]
+
 
 class RunEvidenceRepository:
     def __init__(self, session): self.session=session
