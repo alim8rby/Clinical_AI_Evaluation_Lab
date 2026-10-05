@@ -66,10 +66,16 @@ Empirical benchmark runs remain pending actual execution.
 
 Empirical statistical results remain pending actual experiment execution.
 
-## V5.7 — Failure Observatory 2.0 — PLANNED
-- Failure trends by experiment, model, difficulty, and question type
-- Regression detection
-- Experiment-to-failure-to-evidence traceability
+## V5.7 — Failure Observatory 2.0 — ENGINEERING COMPLETE
+- Experiment-aware failure trends
+- Failure analysis by category, type, severity, difficulty, and question type
+- Unique affected-question counts
+- Baseline/candidate failure-rate comparison
+- Configurable regression signals
+- Frozen V3 failure schema preserved
+- Methodology and audit completed
+
+Empirical regression results remain pending actual experiment execution.
 
 ## V5.8 — Evidence Explorer 2.0 — PLANNED
 - Full Question → Evidence → Claim → Citation → Chunk → Document inspection
