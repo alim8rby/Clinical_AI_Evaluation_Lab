@@ -11,6 +11,7 @@ MIGRATIONS = (
     ("002_pgvector", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "002_pgvector.sql"),
     ("003_semantic_embeddings", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "003_semantic_embeddings.sql"),
     ("004_retrieval_trace", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "004_retrieval_trace.sql"),
+    ("005_reproducibility", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "005_reproducibility.sql"),
 )
 
 
