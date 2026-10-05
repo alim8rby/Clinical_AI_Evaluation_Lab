@@ -17,6 +17,16 @@ class FailureDimensionSummary:
 
 
 @dataclass(frozen=True)
+class FailureDimensionRate:
+    dimension: str
+    value: str
+    failure_count: int
+    unique_questions: int
+    question_count: int
+    failure_rate: float
+
+
+@dataclass(frozen=True)
 class FailureRegression:
     category: str
     failure_type: str
@@ -26,6 +36,9 @@ class FailureRegression:
     baseline_questions: int
     candidate_questions: int
     regression: bool
+    baseline_affected_questions: int = 0
+    candidate_affected_questions: int = 0
+    question_level_regression: bool = False
 
 
 @dataclass(frozen=True)
@@ -33,6 +46,7 @@ class ObservatoryAnalysis:
     experiment_id: str | None
     total_failures: int
     unique_questions: int
+    completed_questions: int | None
     by_category: dict[str, int]
     by_type: dict[str, int]
     by_severity: dict[str, int]
@@ -47,15 +61,22 @@ def _count(
     return dict(sorted(Counter(key(failure) for failure in failures).items()))
 
 
+def _validate_question_count(question_count: int | None) -> None:
+    if question_count is not None and question_count <= 0:
+        raise ValueError("question count must be greater than zero")
+
+
 def analyze_experiment(
     failures: list[Failure] | tuple[Failure, ...],
     *,
     experiment_id: str,
     run_to_experiment: dict[str, str],
     question_metadata: dict[str, dict],
+    completed_question_count: int | None = None,
 ) -> ObservatoryAnalysis:
     if not experiment_id.strip():
         raise ValueError("experiment_id must not be empty")
+    _validate_question_count(completed_question_count)
 
     selected = [
         failure
@@ -68,6 +89,7 @@ def analyze_experiment(
         experiment_id=experiment_id,
         total_failures=len(selected),
         unique_questions=len(unique_questions),
+        completed_questions=completed_question_count,
         by_category=_count(selected, lambda item: item.category),
         by_type=_count(selected, lambda item: item.type),
         by_severity=_count(selected, lambda item: item.severity.value),
@@ -120,6 +142,33 @@ def dimension_summary(
     )
 
 
+def dimension_rates(
+    failures: list[Failure] | tuple[Failure, ...],
+    *,
+    dimension: str,
+    question_count: int,
+    question_metadata: dict[str, dict] | None = None,
+) -> tuple[FailureDimensionRate, ...]:
+    if question_count <= 0:
+        raise ValueError("question count must be greater than zero")
+
+    return tuple(
+        FailureDimensionRate(
+            dimension=item.dimension,
+            value=item.value,
+            failure_count=item.failure_count,
+            unique_questions=item.unique_questions,
+            question_count=question_count,
+            failure_rate=item.failure_count / question_count,
+        )
+        for item in dimension_summary(
+            failures,
+            dimension=dimension,
+            question_metadata=question_metadata,
+        )
+    )
+
+
 def compare_failure_rates(
     baseline_failures: list[Failure] | tuple[Failure, ...],
     candidate_failures: list[Failure] | tuple[Failure, ...],
@@ -135,24 +184,61 @@ def compare_failure_rates(
 
     baseline = Counter((failure.category, failure.type) for failure in baseline_failures)
     candidate = Counter((failure.category, failure.type) for failure in candidate_failures)
+    baseline_questions = {
+        key: {failure.question_id for failure in baseline_failures if (failure.category, failure.type) == key}
+        for key in set(baseline)
+    }
+    candidate_questions = {
+        key: {failure.question_id for failure in candidate_failures if (failure.category, failure.type) == key}
+        for key in set(candidate)
+    }
     keys = sorted(set(baseline) | set(candidate))
 
     return tuple(
-        FailureRegression(
-            category=category,
-            failure_type=failure_type,
-            baseline_rate=baseline[(category, failure_type)] / baseline_question_count,
-            candidate_rate=candidate[(category, failure_type)] / candidate_question_count,
-            rate_difference=(
-                candidate[(category, failure_type)] / candidate_question_count
-                - baseline[(category, failure_type)] / baseline_question_count
-            ),
-            baseline_questions=baseline_question_count,
-            candidate_questions=candidate_question_count,
-            regression=(
-                candidate[(category, failure_type)] / candidate_question_count
-                - baseline[(category, failure_type)] / baseline_question_count
-            ) >= regression_threshold,
+        _build_regression(
+            category,
+            failure_type,
+            baseline,
+            candidate,
+            baseline_questions,
+            candidate_questions,
+            baseline_question_count,
+            candidate_question_count,
+            regression_threshold,
         )
         for category, failure_type in keys
+    )
+
+
+def _build_regression(
+    category: str,
+    failure_type: str,
+    baseline: Counter,
+    candidate: Counter,
+    baseline_questions: dict[tuple[str, str], set[str]],
+    candidate_questions: dict[tuple[str, str], set[str]],
+    baseline_question_count: int,
+    candidate_question_count: int,
+    regression_threshold: float,
+) -> FailureRegression:
+    key = (category, failure_type)
+    baseline_rate = baseline[key] / baseline_question_count
+    candidate_rate = candidate[key] / candidate_question_count
+    baseline_affected = len(baseline_questions.get(key, set()))
+    candidate_affected = len(candidate_questions.get(key, set()))
+    question_regression = bool(
+        candidate_questions.get(key, set()) - baseline_questions.get(key, set())
+    )
+    return FailureRegression(
+        category=category,
+        failure_type=failure_type,
+        baseline_rate=baseline_rate,
+        candidate_rate=candidate_rate,
+        rate_difference=candidate_rate - baseline_rate,
+        baseline_questions=baseline_question_count,
+        candidate_questions=candidate_question_count,
+        regression=(candidate_rate - baseline_rate) >= regression_threshold,
+        baseline_affected_questions=baseline_affected,
+        candidate_affected_questions=candidate_affected,
+        question_level_regression=question_regression,
     )
