@@ -85,11 +85,29 @@ class FailureObservatoryRepository:
 class ExperimentRepository:
     def __init__(self,session): self.session=session
     def save(self,e):
-        self.session.merge(ExperimentRow(experiment_id=e.experiment_id,name=e.name,description=e.description,model_config=e.config.model_config,embedding_config=e.config.embedding_config,retriever_config=e.config.retriever_config,top_k=e.config.top_k,prompt_version=e.config.prompt_version,benchmark_version=e.config.benchmark_version,created_at=e.created_at)); self.session.commit()
+        snapshot=e.config.reproducibility_snapshot()
+        payload=snapshot.as_dict()
+        existing=self.session.get(ExperimentRow,e.experiment_id)
+        if existing is not None:
+            if existing.reproducibility_hash and existing.reproducibility_hash != snapshot.config_hash:
+                raise ValueError("experiment reproducibility configuration is immutable")
+            if existing.model_config != e.config.model_config or existing.embedding_config != e.config.embedding_config or existing.retriever_config != e.config.retriever_config or existing.top_k != e.config.top_k or existing.prompt_version != e.config.prompt_version or existing.benchmark_version != e.config.benchmark_version:
+                raise ValueError("experiment configuration is immutable")
+        row=ExperimentRow(experiment_id=e.experiment_id,name=e.name,description=e.description,model_config=e.config.model_config,embedding_config=e.config.embedding_config,retriever_config=e.config.retriever_config,top_k=e.config.top_k,prompt_version=e.config.prompt_version,benchmark_version=e.config.benchmark_version,created_at=e.created_at,reproducibility_snapshot=payload,reproducibility_hash=snapshot.config_hash)
+        self.session.merge(row)
+        self.session.commit()
     def get(self,eid):
         r=self.session.get(ExperimentRow,eid)
         if not r:return None
-        c=ExperimentConfig(r.model_config,r.embedding_config,r.retriever_config,r.top_k,r.prompt_version,r.benchmark_version)
+        snapshot=r.reproducibility_snapshot or {}
+        c=ExperimentConfig(
+            r.model_config,r.embedding_config,r.retriever_config,r.top_k,r.prompt_version,r.benchmark_version,
+            model_version=snapshot.get("model_version","unspecified"),
+            embedding_version=snapshot.get("embedding_version","unspecified"),
+            retriever_version=snapshot.get("retriever_version","unspecified"),
+            evaluator_versions=snapshot.get("evaluator_versions") or {},
+            runtime_version=snapshot.get("runtime_version","caiel-runtime-v1"),
+        )
         return Experiment(r.experiment_id,r.name,r.description,c,r.created_at)
 
 class RunRepository:
