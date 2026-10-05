@@ -25,9 +25,24 @@ class FailureRepository:
             if existing is None: self.session.add(self._to_row(failure))
         self.session.commit()
     def get(self,failure_id):
-        row=self.session.get(FailureRow,failure_id); return self._to_domain(row) if row else None
+        row = self.session.execute(
+            select(FailureRow)
+            .join(RunRow, RunRow.run_id == FailureRow.run_id)
+            .where(
+                FailureRow.failure_id == failure_id,
+                FailureRow.created_at >= RunRow.started_at,
+            )
+        ).scalar_one_or_none()
+        return self._to_domain(row) if row else None
+
     def list(self):
-        return [self._to_domain(r) for r in self.session.scalars(select(FailureRow).order_by(FailureRow.failure_id)).all()]
+        rows = self.session.execute(
+            select(FailureRow)
+            .join(RunRow, RunRow.run_id == FailureRow.run_id)
+            .where(FailureRow.created_at >= RunRow.started_at)
+            .order_by(FailureRow.failure_id)
+        ).scalars().all()
+        return [self._to_domain(row) for row in rows]
     def count(self): return len(self.list())
     @staticmethod
     def _to_row(f):
@@ -332,7 +347,10 @@ class EvaluationAnalysisRepository:
         rows = self.session.execute(
             select(FailureRow)
             .join(RunRow, RunRow.run_id == FailureRow.run_id)
-            .where(RunRow.experiment_id == experiment_id)
+            .where(
+                RunRow.experiment_id == experiment_id,
+                FailureRow.created_at >= RunRow.started_at,
+            )
             .order_by(FailureRow.failure_id)
         ).scalars().all()
         return [FailureRepository._to_domain(row) for row in rows]
