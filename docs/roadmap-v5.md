@@ -70,7 +70,11 @@ Empirical statistical results remain pending actual experiment execution.
 - Experiment-aware failure trends
 - Failure analysis by category, type, severity, difficulty, and question type
 - Unique affected-question counts
+- Completed-question denominators
+- Denominator-aware failure rates
 - Baseline/candidate failure-rate comparison
+- Deterministic question-level regression signals
+- API and minimal frontend integration
 - Configurable regression signals
 - Frozen V3 failure schema preserved
 - Methodology and audit completed
