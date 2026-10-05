@@ -4,7 +4,7 @@ const state={failures:[],summary:null,experiment:null,experiments:[]};
 async function api(path,options){options=options||{};const r=await fetch(API+path,{headers:{"Content-Type":"application/json"},...options});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error((d.error&&d.error.message)||d.detail||"Request failed ("+r.status+")");return d;}
 function esc(v){return String(v==null?"":v).replace(/[&<>"\']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","\'":"&#039;"}[c]));}
 function toast(m){const e=$("toast");e.textContent=m;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2500)}
-function view(v){document.querySelectorAll(".view").forEach(e=>e.classList.toggle("active",e.id==="view-"+v));document.querySelectorAll(".nav-button").forEach(e=>e.classList.toggle("active",e.dataset.view===v));if(v==="overview")loadOverview();if(v==="experiments")loadExperiments();if(v==="failures")loadFailures()}
+function view(v){document.querySelectorAll(".view").forEach(e=>e.classList.toggle("active",e.id==="view-"+v));document.querySelectorAll(".nav-button").forEach(e=>e.classList.toggle("active",e.dataset.view===v));if(v==="overview")loadOverview();if(v==="research")loadResearchDashboard();if(v==="experiments")loadExperiments();if(v==="failures")loadFailures()}
 document.querySelectorAll(".nav-button").forEach(b=>b.onclick=()=>view(b.dataset.view));
 async function loadOverview(){try{const m=await api("/metrics");$("runsTotal").textContent=m.runs_total;$("runsCompleted").textContent=m.runs_completed;$("failuresTotal").textContent=m.failures_total;$("avgLatency").textContent=m.average_latency_ms==null?"—":m.average_latency_ms+" ms";$("metricsDetail").innerHTML=[["Failed runs",m.runs_failed],["Input tokens",m.input_tokens_total],["Output tokens",m.output_tokens_total],["Cost",m.cost_total]].map(x=>"<dt>"+esc(x[0])+"</dt><dd>"+esc(x[1])+"</dd>").join("")}catch(e){toast(e.message)}loadReadiness()}
 async function loadReadiness(){try{const r=await fetch("/health/readiness"),d=await r.json();$("systemStatus").textContent=d.status==="ready"?"System ready":"System not ready";$("systemStatus").className="status "+(d.status==="ready"?"ready":"warning");$("readinessDetail").innerHTML=Object.entries(d.checks||{}).map(x=>"<dt>"+esc(x[0])+"</dt><dd>"+(x[1]?"Ready":"Not ready")+"</dd>").join("")}catch(e){$("systemStatus").textContent="System unavailable";$("systemStatus").className="status warning"}}
@@ -80,3 +80,44 @@ function renderExperiments(){const target=$("experimentList");if(!state.experime
 function selectExperiment(d){state.experiment=d;$("experimentTitle").textContent=d.name;$("experimentState").innerHTML="<dl class=detail-list><dt>ID</dt><dd>"+esc(d.experiment_id)+"</dd><dt>Benchmark</dt><dd>"+esc(d.benchmark_version)+"</dd><dt>Prompt</dt><dd>"+esc(d.prompt_version)+"</dd><dt>Top K</dt><dd>"+d.top_k+"</dd></dl>";$("baselineId").value=d.experiment_id;loadExperimentReport(d.experiment_id);document.querySelectorAll(".experiment-item").forEach(b=>b.classList.toggle("selected",b.dataset.id===d.experiment_id))}
 async function loadExperimentReport(id){const target=$("experimentReport");target.className="detail";target.textContent="Loading metrics…";try{const d=await api("/experiments/"+encodeURIComponent(id)+"/report");const r=d.configuration.reproducibility||{};const metrics=Object.entries(d.metrics||{});target.innerHTML="<div class=panel-head><div><p class=eyebrow>Research artifact</p><h2>Reproducible report</h2></div><a class=primary href=\""+API+"/experiments/"+encodeURIComponent(id)+"/report/markdown\" target=\"_blank\" rel=\"noopener\">Open Markdown report</a></div><dl class=detail-list><dt>Completed runs</dt><dd>"+esc(d.sample_count)+"</dd><dt>Config hash</dt><dd><code>"+esc(r.config_hash||"—")+"</code></dd><dt>Model</dt><dd>"+esc(r.model_version||"—")+"</dd><dt>Embedding</dt><dd>"+esc(r.embedding_version||"—")+"</dd><dt>Retriever</dt><dd>"+esc(r.retriever_version||"—")+"</dd><dt>Runtime</dt><dd>"+esc(r.runtime_version||"—")+"</dd></dl><h3>Metrics</h3><div class=metric-table><table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>"+(metrics.length?metrics.map(x=>"<tr><td>"+esc(x[0])+"</td><td>"+Number(x[1]).toFixed(3)+"</td></tr>").join(""):"<tr><td colspan=2>No completed evaluation metrics.</td></tr>")+"</tbody></table></div>"}catch(e){target.className="detail error";target.textContent=e.message}}
 $("refreshExperiments").onclick=loadExperiments;
+
+async function loadResearchDashboard(){
+  try{
+    const d=await api("/experiments");
+    const select=$("researchExperiment");
+    const current=select.value;
+    select.replaceChildren(new Option("Select experiment",""));
+    (d.experiments||[]).forEach(x=>select.add(new Option(x.name+" · "+x.benchmark_version,x.experiment_id)));
+    select.value=current && (d.experiments||[]).some(x=>x.experiment_id===current) ? current : ((d.experiments||[])[0]?.experiment_id||"");
+    if(select.value) await renderResearchExperiment(select.value);
+    else $("researchState").textContent="No experiments available.";
+  }catch(e){toast(e.message)}
+}
+async function renderResearchExperiment(id){
+  const stateEl=$("researchState");
+  stateEl.className="detail";
+  stateEl.textContent="Loading research summary…";
+  try{
+    const d=await api("/experiments/"+encodeURIComponent(id)+"/report");
+    const r=d.configuration.reproducibility||{};
+    const m=d.metrics||{};
+    $("researchRuns").textContent=d.sample_count;
+    $("researchCorrectness").textContent=m.correctness==null?"—":Number(m.correctness).toFixed(3);
+    $("researchFaithfulness").textContent=m.faithfulness==null?"—":Number(m.faithfulness).toFixed(3);
+    $("researchCitation").textContent=m.citation_coverage==null?"—":Number(m.citation_coverage).toFixed(3);
+    stateEl.innerHTML="<strong>"+esc(d.experiment_id)+"</strong><p>"+esc(d.benchmark_version)+" · "+esc(r.retriever_version||"—")+" · "+esc(r.runtime_version||"—")+"</p>";
+    $("researchMarkdown").href=API+"/experiments/"+encodeURIComponent(id)+"/report/markdown";
+    $("researchMetricRows").replaceChildren(...Object.entries(m).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML="<td>"+esc(k)+"</td><td>"+(typeof v==="number"?Number(v).toFixed(3):esc(v))+"</td>";
+      return tr;
+    }));
+    $("researchConfig").innerHTML="<dl class=detail-list>"+[
+      ["Model",r.model_version||"—"],["Embedding",r.embedding_version||"—"],["Retriever",r.retriever_version||"—"],
+      ["Prompt",r.prompt_version||"—"],["Benchmark",r.benchmark_version||d.benchmark_version||"—"],
+      ["Runtime",r.runtime_version||"—"],["Config hash",r.config_hash||"—"]
+    ].map(x=>"<dt>"+esc(x[0])+"</dt><dd><code>"+esc(x[1])+"</code></dd>").join("")+"</dl>";
+  }catch(e){stateEl.className="detail error";stateEl.textContent=e.message}
+}
+$("researchExperiment").onchange=()=>{if($("researchExperiment").value)renderResearchExperiment($("researchExperiment").value)};
+$("refreshResearch").onclick=loadResearchDashboard;
