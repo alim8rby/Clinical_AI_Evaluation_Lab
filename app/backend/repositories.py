@@ -33,6 +33,39 @@ class FailureRepository:
     def _to_domain(r):
         return Failure(failure_id=r.failure_id,run_id=r.run_id,question_id=r.question_id,category=r.category,type=r.type,severity=FailureSeverity(r.severity),description=r.description,evidence=r.evidence,answer_id=r.answer_id,metric=r.metric,metric_value=r.metric_value,classifier_version=r.classifier_version,created_at=r.created_at)
 
+
+class FailureObservatoryRepository:
+    """Read adapter for experiment-aware Failure Observatory analysis."""
+
+    def __init__(self, session: Session):
+        self.session = session
+
+    def failures(self):
+        return FailureRepository(self.session).list()
+
+    def run_to_experiment(self):
+        rows = self.session.execute(
+            select(RunRow.run_id, RunRow.experiment_id).order_by(RunRow.run_id)
+        ).all()
+        return {run_id: experiment_id for run_id, experiment_id in rows}
+
+    def completed_question_count(self, experiment_id: str) -> int:
+        rows = self.session.execute(
+            select(RunRow.question_id)
+            .where(RunRow.experiment_id == experiment_id, RunRow.status == "completed")
+            .distinct()
+            .order_by(RunRow.question_id)
+        ).all()
+        return len(rows)
+
+    def question_ids(self, experiment_id: str, *, completed_only: bool = True):
+        statement = select(RunRow.question_id).where(RunRow.experiment_id == experiment_id)
+        if completed_only:
+            statement = statement.where(RunRow.status == "completed")
+        rows = self.session.execute(statement.distinct().order_by(RunRow.question_id)).all()
+        return tuple(question_id for question_id, in rows)
+
+
 class ExperimentRepository:
     def __init__(self,session): self.session=session
     def save(self,e):
