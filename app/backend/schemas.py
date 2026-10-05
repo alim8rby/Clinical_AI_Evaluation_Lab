@@ -7,6 +7,52 @@ class QARequest(BaseModel): question:str=Field(min_length=1); top_k:int=Field(de
 class CitationResponse(BaseModel): citation_id:str; answer_id:str; claim_index:int; chunk_id:str; citation_text:str
 class EvidenceResponse(BaseModel): chunk_id:str; document_id:str; score:float|None; rank:int; text:str
 class QAResponse(BaseModel): question:str; answer:str; uncertainty:str|None; model:str; prompt_version:str; evidence:list[EvidenceResponse]; citations:list[CitationResponse]
+class ExplorerCitationResponse(BaseModel):
+    citation_id: str
+    claim_index: int
+    chunk_id: str
+    citation_text: str
+
+
+class ExplorerClaimResponse(BaseModel):
+    claim_index: int
+    text: str
+    citation_indices: list[int]
+    citations: list[ExplorerCitationResponse]
+
+
+class ExplorerChunkResponse(BaseModel):
+    chunk_id: str
+    document_id: str
+    text: str
+    section: str | None
+    page: int | None
+    rank: int
+    score: float | None
+    used_in_citation: bool
+
+
+class ExplorerDocumentResponse(BaseModel):
+    document_id: str
+    title: str
+    source: str
+    organization: str
+    publication_date: str | None
+    url: str
+
+
+class EvidenceExplorerResponse(BaseModel):
+    run_id: str
+    question_id: str
+    question: str | None
+    answer_id: str | None
+    answer: str | None
+    uncertainty: str | None
+    claims: list[ExplorerClaimResponse]
+    chunks: list[ExplorerChunkResponse]
+    documents: list[ExplorerDocumentResponse]
+
+
 class FailureResponse(BaseModel):
     failure_id:str; run_id:str; question_id:str; category:str; type:str; severity:str; description:str; evidence:str; answer_id:str|None=None; metric:str|None=None; metric_value:float|None=None; classifier_version:str; created_at:str|None=None
 class FailureListResponse(BaseModel): failures:list[FailureResponse]
