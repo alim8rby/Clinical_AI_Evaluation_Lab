@@ -15,5 +15,7 @@ dist
 build
 *.egg-info
 data/raw/*
+!data/raw/controlled/
+!data/raw/controlled/**
 data/processed/*
 data/results/*
