@@ -85,6 +85,15 @@ class EvaluationRow(Base):
     details: Mapped[dict] = mapped_column(JSON)
 
 
+class RetrievalTraceRow(Base):
+    __tablename__ = "retrieval_traces"
+    retrieval_id: Mapped[str] = mapped_column(String(150), primary_key=True)
+    run_id: Mapped[str] = mapped_column(String(64), index=True)
+    chunk_id: Mapped[str] = mapped_column(String(64), index=True)
+    rank: Mapped[int] = mapped_column(Integer)
+    score: Mapped[float | None] = mapped_column(Float, nullable=True)
+
+
 class FailureRow(Base):
     __tablename__ = "failures"
     failure_id: Mapped[str] = mapped_column(String(150), primary_key=True)
