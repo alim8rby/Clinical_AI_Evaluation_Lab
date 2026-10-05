@@ -8,7 +8,7 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V5.8 — Evidence Explorer 2.0: NEXT**
+**V5.8 — Evidence Explorer 2.0: ENGINEERING COMPLETE**
 
 V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, and local failure-analysis observatory.
 
@@ -83,9 +83,9 @@ V4.0–V4.15 is frozen. The application has a FastAPI boundary, PostgreSQL persi
 
 ### V5 — Evaluation Platform
 
-V5.1 engineering is frozen with a human-calibration framework and explicit annotation rubric. V5.2 is frozen with a 60-question ClinicalQA-v2 benchmark while preserving ClinicalQA-v1 as an immutable baseline. V5.3 adds controlled dense, BM25, and hybrid retrieval comparisons. V5.4 adds controlled generation-provider evaluation with quality, grounding, reliability, latency, token, and cost metrics. V5.5 adds reproducible batch experiment execution, configuration capture, aggregate reporting, and failure retention. V5.6 adds paired statistical comparisons, deterministic bootstrap confidence intervals, and effect-size reporting. V5.7 adds experiment-aware failure trends, denominator-aware rates, benchmark-aware enrichment, and regression signals without changing the frozen failure schema.
+V5.1 engineering is frozen with a human-calibration framework and explicit annotation rubric. V5.2 is frozen with a 60-question ClinicalQA-v2 benchmark while preserving ClinicalQA-v1 as an immutable baseline. V5.3 adds controlled dense, BM25, and hybrid retrieval comparisons. V5.4 adds controlled generation-provider evaluation with quality, grounding, reliability, latency, token, and cost metrics. V5.5 adds reproducible batch experiment execution, configuration capture, aggregate reporting, and failure retention. V5.6 adds paired statistical comparisons, deterministic bootstrap confidence intervals, and effect-size reporting. V5.7 adds experiment-aware failure trends, denominator-aware rates, benchmark-aware enrichment, and regression signals without changing the frozen failure schema. V5.8 adds end-to-end evidence tracing, exact per-run retrieval traces, retrieved-but-unused evidence detection, and document provenance inspection.
 
-See docs/methodology/v5.1-calibration.md, docs/methodology/v5.1-annotation-rubric.md, docs/methodology/v5.1-audit.md, docs/methodology/v5.2-benchmark.md, and docs/methodology/v5.2-audit.md, and docs/methodology/v5.3-retrieval-research.md.
+See docs/methodology/v5.1-calibration.md, docs/methodology/v5.1-annotation-rubric.md, docs/methodology/v5.1-audit.md, docs/methodology/v5.2-benchmark.md, and docs/methodology/v5.2-audit.md, and docs/methodology/v5.3-retrieval-research.md, docs/methodology/v5.8-evidence-explorer.md, and docs/methodology/v5.8-audit.md.
 
 ## Important limitations
 
