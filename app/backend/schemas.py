@@ -152,6 +152,9 @@ class ExperimentResponse(BaseModel):
             reproducibility_snapshot=e.config.reproducibility_snapshot().as_dict(),
             reproducibility_hash=e.config.reproducibility_snapshot().config_hash,
         )
+class ExperimentListResponse(BaseModel):
+    experiments: list[ExperimentResponse]
+
 class RunRequest(BaseModel):
     question_id:str=Field(min_length=1); question:str=Field(min_length=1); domain:str="depression"; difficulty:str="easy"; expected_evidence:list[str]=Field(min_length=1); reference_answer:str=Field(min_length=1); key_concepts:list[str]=Field(min_length=1)
 class RunResponse(BaseModel):
