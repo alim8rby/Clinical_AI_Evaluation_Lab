@@ -18,7 +18,7 @@ class GroundingMetricTests(unittest.TestCase):
             [Claim("Depression involves persistent low mood.", [1])],
             None, "mock-v1", "v1",
         )
-        citation = Citation("c1", "answer-1", 1, "chunk-1", "chunk-1")
+        citation = Citation("c1", "answer-1", 0, "chunk-1", "chunk-1")
         result = evaluate_grounding(answer, [citation], self._evidence())
         self.assertEqual(result.citation_coverage, 1.0)
         self.assertEqual(result.citation_validity, 1.0)
@@ -42,7 +42,11 @@ class GroundingMetricTests(unittest.TestCase):
             [Claim("Depression involves persistent low mood.", [1])],
             None, "mock-v1", "v1",
         )
-        citation = Citation("c1", "answer-1", 1, "missing", "missing")
+        citation = Citation("c1", "answer-1", 0, "missing", "missing")
         result = evaluate_grounding(answer, [citation], self._evidence())
         self.assertEqual(result.citation_coverage, 1.0)
         self.assertEqual(result.citation_validity, 0.0)
+
+
+if __name__ == "__main__":
+    unittest.main()
