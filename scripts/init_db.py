@@ -10,6 +10,7 @@ MIGRATIONS = (
     ("001_initial", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "001_initial.sql"),
     ("002_pgvector", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "002_pgvector.sql"),
     ("003_semantic_embeddings", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "003_semantic_embeddings.sql"),
+    ("004_retrieval_trace", Path(__file__).resolve().parents[1] / "app" / "backend" / "migrations" / "004_retrieval_trace.sql"),
 )
 
 
