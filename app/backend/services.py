@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from app.backend.database import DATABASE_URL, SessionLocal
 from app.backend.runtime import EvaluationRuntime
 from src.evaluation.ollama_semantic import OllamaSemanticEvaluator
-from app.backend.repositories import ChunkEmbeddingRepository, ChunkRepository, DocumentRepository
+from app.backend.repositories import ChunkEmbeddingRepository, ChunkRepository, DocumentRepository, FailureObservatoryRepository
+from src.failure_analysis.observatory_v2_service import FailureObservatoryV2
 from src.failure_analysis import FailureObservatory, FailureQuery
 from src.generation import OllamaGenerationProvider, build_citations
 from src.ingestion.models import SourceDocument
@@ -84,6 +85,48 @@ class DatabaseFailureObservatory:
 
     def snapshot(self, query: FailureQuery):
         return self._run(lambda observatory: observatory.snapshot(query))
+
+
+class DatabaseFailureObservatoryV2:
+    """Request-scoped adapter for experiment-aware failure analysis."""
+
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
+
+    def _build(self, session):
+        repository = FailureObservatoryRepository(session)
+        root = Path(__file__).resolve().parents[2]
+        metadata = repository.question_metadata(
+            str(root / "data" / "benchmark" / "clinicalqa_v2.json")
+        )
+        return FailureObservatoryV2(
+            tuple(repository.failures()),
+            repository.run_to_experiment(),
+            metadata,
+        ), repository
+
+    def for_experiment(self, experiment_id):
+        session = self.session_factory()
+        try:
+            observatory, repository = self._build(session)
+            count = repository.completed_question_count(experiment_id)
+            return observatory.for_experiment(experiment_id)._replace(completed_questions=count)
+        finally:
+            session.close()
+
+    def regression(self, baseline_experiment_id, candidate_experiment_id, threshold=0.10):
+        session = self.session_factory()
+        try:
+            observatory, repository = self._build(session)
+            return observatory.regression(
+                baseline_experiment_id,
+                candidate_experiment_id,
+                baseline_question_count=repository.completed_question_count(baseline_experiment_id),
+                candidate_question_count=repository.completed_question_count(candidate_experiment_id),
+                regression_threshold=threshold,
+            )
+        finally:
+            session.close()
 
 
 class ApiServices:
