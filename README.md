@@ -1,5 +1,8 @@
 # Clinical AI Evaluation Lab (CAIEL)
 
+**Evaluation infrastructure for AI systems that answer clinical questions.**
+
+
 **CAIEL is an engineering platform for evaluating, tracing, comparing, and investigating AI systems that answer clinical questions.**
 
 It is deliberately more than a medical chatbot:
