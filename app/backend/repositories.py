@@ -298,7 +298,7 @@ class ChunkEmbeddingRepository:
             vector_literal = "[" + ",".join(str(float(value)) for value in embedding) + "]"
             self.session.execute(
                 text(
-                    "UPDATE chunks SET embedding = CAST(:embedding AS vector) "
+                    f"UPDATE chunks SET {column} = CAST(:embedding AS vector) "
                     "WHERE chunk_id = :chunk_id"
                 ),
                 {"embedding": vector_literal, "chunk_id": chunk.chunk_id},
