@@ -39,6 +39,8 @@ class ExperimentRow(Base):
     prompt_version: Mapped[str] = mapped_column(String(100))
     benchmark_version: Mapped[str] = mapped_column(String(100))
     created_at: Mapped[datetime] = mapped_column(DateTime)
+    reproducibility_snapshot: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    reproducibility_hash: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
 
 
 class RunRow(Base):
