@@ -15,6 +15,15 @@ app = FastAPI(title="Clinical AI Evaluation Lab", version="0.4.0", description="
 app.include_router(router, prefix="/api/v1")
 
 @app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    return response
+
+@app.middleware("http")
 async def observability_middleware(request: Request, call_next):
     correlation_id = request.headers.get("X-Correlation-ID") or set_correlation_id()
     set_correlation_id(correlation_id)
