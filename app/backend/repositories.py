@@ -109,6 +109,9 @@ class ExperimentRepository:
             runtime_version=snapshot.get("runtime_version","caiel-runtime-v1"),
         )
         return Experiment(r.experiment_id,r.name,r.description,c,r.created_at)
+    def list(self):
+        rows=self.session.execute(select(ExperimentRow).order_by(ExperimentRow.created_at.desc())).scalars().all()
+        return [self.get(row.experiment_id) for row in rows]
 
 class RunRepository:
     def __init__(self,session): self.session=session
