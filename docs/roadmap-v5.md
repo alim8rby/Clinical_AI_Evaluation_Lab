@@ -92,9 +92,15 @@ Empirical regression results remain pending actual experiment execution.
 
 Historical runs created before V5.8 may not contain retrieval traces, so their original retrieved-but-unused evidence cannot be reconstructed with certainty.
 
-## V5.9 — Reproducible Model Configuration — PLANNED
-- Explicit model, embedding, retriever, prompt, evaluator, and benchmark versions
-- Reproducible experiment configuration
+## V5.9 — Reproducible Model Configuration — ENGINEERING COMPLETE
+- Explicit model, embedding, retriever, prompt, evaluator, benchmark, and runtime versions
+- Canonical reproducibility snapshot and SHA-256 hash
+- Experiment identity bound to reproducibility configuration
+- Write-once experiment configuration
+- API and report exposure
+- V5.9 methodology and audit/freeze completed
+
+Empirical bit-for-bit reproducibility is not claimed; provider nondeterminism can remain.
 
 ## V5.10 — Platform UX — PLANNED
 - Experiment workflow
