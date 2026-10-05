@@ -61,6 +61,19 @@ class FailureObservatoryRepository:
         ).all()
         return len(rows)
 
+    def question_metadata(self, benchmark_version: str):
+        if benchmark_version not in {"ClinicalQA-v1", "ClinicalQA-v2"}:
+            raise ValueError(f"unsupported benchmark version: {benchmark_version}")
+        path = (
+            Path(__file__).resolve().parents[2]
+            / "data"
+            / "benchmark"
+            / f"{benchmark_version.lower().replace('-', '_')}.json"
+        )
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        return {item["question_id"]: item for item in payload}
+
+
     def question_ids(self, experiment_id: str, *, completed_only: bool = True):
         statement = select(RunRow.question_id).where(RunRow.experiment_id == experiment_id)
         if completed_only:
