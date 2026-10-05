@@ -29,7 +29,27 @@ def qa(request:QARequest):
 
 @router.post("/experiments",response_model=ExperimentResponse)
 def create_experiment(request:ExperimentCreateRequest):
-    config=ExperimentConfig(request.model_config_,request.embedding_config,request.retriever_config,request.top_k,request.prompt_version,request.benchmark_version)
+    evaluator_versions = dict(request.evaluator_versions)
+    if "retrieval" not in evaluator_versions:
+        evaluator_versions["retrieval"] = "retrieval-v1"
+    if "answer" not in evaluator_versions:
+        evaluator_versions["answer"] = "answer-v1"
+    if "grounding" not in evaluator_versions:
+        evaluator_versions["grounding"] = "grounding-v1"
+    if "reliability" not in evaluator_versions:
+        evaluator_versions["reliability"] = "reliability-v1"
+    if services.semantic_evaluator is not None:
+        evaluator_versions.setdefault("semantic", services.semantic_evaluator.evaluator_version)
+    model_version = request.model_version
+    if model_version == "unspecified":
+        model_version = str(request.model_config_.get("model", request.model_config_.get("version", "unspecified")))
+    embedding_version = request.embedding_version
+    if embedding_version == "unspecified":
+        embedding_version = str(request.embedding_config.get("model", request.embedding_config.get("version", "unspecified")))
+    retriever_version = request.retriever_version
+    if retriever_version == "unspecified":
+        retriever_version = str(request.retriever_config.get("version", "retriever-v1"))
+    config=ExperimentConfig(request.model_config_,request.embedding_config,request.retriever_config,request.top_k,request.prompt_version,request.benchmark_version,model_version=model_version,embedding_version=embedding_version,retriever_version=retriever_version,evaluator_versions=evaluator_versions,runtime_version=request.runtime_version)
     experiment=Experiment.create(request.name,request.description,config,created_at=datetime.now(timezone.utc).replace(tzinfo=None))
     session=services.session()
     try: services.runtime(session).create_experiment(experiment)
