@@ -49,6 +49,7 @@ class FailureObservatoryV2:
         *,
         baseline_question_count: int,
         candidate_question_count: int,
+        regression_threshold: float = 0.10,
     ) -> tuple[FailureRegression, ...]:
         baseline = tuple(
             failure for failure in self.failures
@@ -63,4 +64,5 @@ class FailureObservatoryV2:
             candidate,
             baseline_question_count=baseline_question_count,
             candidate_question_count=candidate_question_count,
+            regression_threshold=regression_threshold,
         )
