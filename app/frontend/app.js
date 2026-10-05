@@ -15,4 +15,38 @@ $("comparisonForm").onsubmit=async e=>{e.preventDefault();const t=$("comparisonR
 async function loadFailures(){try{const a=await api("/failures"),s=await api("/failures/summary");state.failures=a.failures;state.summary=s;renderFailures()}catch(e){toast(e.message)}}
 function renderFailures(){const s=state.summary||{total:0,by_category:{},by_severity:{}};$("failureTotal").textContent=s.total;$("failureCritical").textContent=s.by_severity.CRITICAL||0;$("failureHigh").textContent=s.by_severity.HIGH||0;$("failureCategories").textContent=Object.keys(s.by_category).length;const sel=$("categoryFilter"),old=sel.value;sel.replaceChildren(new Option("All categories",""));Object.keys(s.by_category).sort().forEach(c=>sel.add(new Option(c,c)));sel.value=old;const c=sel.value,z=$("severityFilter").value;$("failureRows").replaceChildren(...state.failures.filter(f=>(!c||f.category===c)&&(!z||f.severity===z)).map(f=>{const r=document.createElement("tr");r.innerHTML="<td><strong>"+esc(f.failure_id)+"</strong></td><td>"+esc(f.category)+"</td><td>"+esc(f.type)+"</td><td><span class=badge>"+esc(f.severity)+"</span></td><td>"+esc(f.question_id)+"</td>";r.onclick=()=>detail(f);return r}));const entries=Object.entries(s.by_category),max=Math.max(...entries.map(x=>x[1]),1);$("categoryBars").innerHTML=entries.map(x=>"<div class=bar-row><span>"+esc(x[0])+"</span><div class=bar><i style=\"width:"+(x[1]/max*100)+"%\"></i></div><strong>"+x[1]+"</strong></div>").join("")}
 function detail(f){$("failureDetail").classList.remove("empty");$("failureDetail").innerHTML="<dl class=detail-list>"+[["Failure ID",f.failure_id],["Category",f.category],["Type",f.type],["Severity",f.severity],["Run",f.run_id],["Question",f.question_id],["Metric",(f.metric||"—")+" "+(f.metric_value==null?"":"= "+f.metric_value)],["Description",f.description],["Evidence",f.evidence],["Classifier",f.classifier_version]].map(x=>"<dt>"+esc(x[0])+"</dt><dd>"+esc(x[1])+"</dd>").join("")+"</dl><div class=trace>Question → Run → Answer/Evaluation → Failure → Metric signal → Evidence</div>"}
+async function loadFailureAnalysis(){
+  const experimentId=$("failureExperimentId").value.trim();
+  const dimension=$("failureDimension").value;
+  if(!experimentId){toast("Enter an experiment ID");return}
+  try{
+    const [analysis,rates]=await Promise.all([
+      api("/failures/experiments/"+encodeURIComponent(experimentId)+"/analysis"),
+      api("/failures/experiments/"+encodeURIComponent(experimentId)+"/rates?dimension="+encodeURIComponent(dimension))
+    ]);
+    $("failureAnalysis").classList.remove("empty");
+    $("failureAnalysis").innerHTML="<dl class=detail-list><dt>Experiment</dt><dd>"+esc(analysis.experiment_id)+"</dd><dt>Completed questions</dt><dd>"+esc(analysis.completed_questions)+"</dd><dt>Total failures</dt><dd>"+esc(analysis.total_failures)+"</dd><dt>Affected questions</dt><dd>"+esc(analysis.unique_questions)+"</dd></dl>";
+    $("failureRateRows").replaceChildren(...rates.rates.map(x=>{
+      const r=document.createElement("tr");
+      r.innerHTML="<td>"+esc(x.dimension)+"</td><td>"+esc(x.value)+"</td><td>"+esc(x.failure_count)+"</td><td>"+esc(x.unique_questions)+"</td><td>"+(x.failure_rate*100).toFixed(1)+"%</td>";
+      return r;
+    }));
+  }catch(e){$("failureAnalysis").textContent=e.message;$("failureAnalysis").className="detail error"}
+}
+async function loadFailureRegression(){
+  const baseline=$("failureBaselineId").value.trim();
+  const candidate=$("failureCandidateId").value.trim();
+  const threshold=+$("failureRegressionThreshold").value;
+  const target=$("failureRegressionResult");
+  if(!baseline||!candidate){toast("Enter both experiment IDs");return}
+  target.className="detail";
+  target.textContent="Comparing…";
+  try{
+    const d=await api("/failures/regression?baseline_experiment_id="+encodeURIComponent(baseline)+"&candidate_experiment_id="+encodeURIComponent(candidate)+"&threshold="+encodeURIComponent(threshold));
+    const flagged=d.regressions.filter(x=>x.regression||x.question_level_regression);
+    target.innerHTML="<p>Threshold: "+(d.threshold*100).toFixed(1)+" percentage points</p><div class=metric-table><table><thead><tr><th>Category</th><th>Type</th><th>Baseline</th><th>Candidate</th><th>Delta</th><th>Signal</th></tr></thead><tbody>"+d.regressions.map(x=>"<tr><td>"+esc(x.category)+"</td><td>"+esc(x.failure_type)+"</td><td>"+(x.baseline_rate*100).toFixed(1)+"%</td><td>"+(x.candidate_rate*100).toFixed(1)+"%</td><td>"+(x.rate_difference*100).toFixed(1)+"pp</td><td>"+(x.regression?"Rate regression":"")+(x.question_level_regression?" Question-level regression":"")+"</td></tr>").join("")+"</tbody></table></div><p>"+flagged.length+" regression signal(s).</p>";
+  }catch(e){target.textContent=e.message}
+}
+$("failureAnalyze").onclick=loadFailureAnalysis;
+$("failureRegressionForm").onsubmit=e=>{e.preventDefault();loadFailureRegression()};
 $("categoryFilter").onchange=renderFailures;$("severityFilter").onchange=renderFailures;loadOverview();
