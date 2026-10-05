@@ -28,7 +28,9 @@ Completed: FastAPI implementation, PostgreSQL and pgvector, structured persisten
 
 See `docs/roadmap-v5.md`.
 
-Current phase: **V5.10 — Platform UX — NEXT**.
+Current phase: **V5.11 — Research Reports — NEXT**.
+
+V5.10 platform UX is engineering complete and frozen. Empirical results remain execution-dependent.
 
 V5.3–V5.7 evaluation-platform engineering phases are complete. Empirical results remain execution-dependent.
 
