@@ -47,7 +47,9 @@ def evaluate_grounding(
     valid = 0
     faithful = 0.0
 
-    for index, claim in enumerate(claims, start=1):
+    # Citation.claim_index is the zero-based claim index produced by
+    # build_citations(); keep the evaluator aligned with that contract.
+    for index, claim in enumerate(claims):
         claim_citations = citations_by_claim.get(index, [])
         if claim_citations:
             covered += 1
