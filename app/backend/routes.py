@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Query
 from app.backend.adapters import failure_response, list_failures, run_qa, summarize_failures
-from app.backend.repositories import EvaluationAnalysisRepository, RunEvidenceRepository, OperationalMetricsRepository
+from app.backend.repositories import EvaluationAnalysisRepository, RunEvidenceRepository, OperationalMetricsRepository, RunEvidenceExplorerRepository
 from app.backend.schemas import *
 from app.backend.services import services, DatabaseFailureObservatoryV2
 from src.evaluation.benchmark import BenchmarkQuestion
@@ -184,6 +184,75 @@ def failure_regression(
 def failure_detail(failure_id:str):
     try:return failure_response(services.observatory.get_failure(failure_id))
     except FailureNotFoundError as exc: raise HTTPException(status_code=404,detail=str(exc)) from exc
+
+@router.get("/runs/{run_id}/evidence/explorer",response_model=EvidenceExplorerResponse)
+def run_evidence_explorer(run_id: str):
+    session = services.session()
+    try:
+        run = services.runtime(session).runs.get(run_id)
+        if run is None:
+            raise HTTPException(status_code=404, detail="run not found")
+        experiment = services.runtime(session).experiments.get(run.experiment_id)
+        if experiment is None:
+            raise HTTPException(status_code=404, detail="experiment not found")
+        explorer = RunEvidenceExplorerRepository(session).get(
+            run_id,
+            experiment.config.benchmark_version,
+        )
+        if explorer is None:
+            raise HTTPException(status_code=404, detail="evidence trace not found")
+        return EvidenceExplorerResponse(
+            run_id=explorer.run_id,
+            question_id=explorer.question_id,
+            question=explorer.question,
+            answer_id=explorer.answer_id,
+            answer=explorer.answer_text,
+            uncertainty=explorer.uncertainty,
+            claims=[
+                ExplorerClaimResponse(
+                    claim_index=item.claim_index,
+                    text=item.text,
+                    citation_indices=list(item.citation_indices),
+                    citations=[
+                        ExplorerCitationResponse(
+                            citation_id=c.citation_id,
+                            claim_index=c.claim_index,
+                            chunk_id=c.chunk_id,
+                            citation_text=c.citation_text,
+                        )
+                        for c in item.citations
+                    ],
+                )
+                for item in explorer.claims
+            ],
+            chunks=[
+                ExplorerChunkResponse(
+                    chunk_id=item.chunk_id,
+                    document_id=item.document_id,
+                    text=item.text,
+                    section=item.section,
+                    page=item.page,
+                    rank=item.rank,
+                    score=item.score,
+                    used_in_citation=item.used_in_citation,
+                )
+                for item in explorer.chunks
+            ],
+            documents=[
+                ExplorerDocumentResponse(
+                    document_id=item.document_id,
+                    title=item.title,
+                    source=item.source,
+                    organization=item.organization,
+                    publication_date=item.publication_date,
+                    url=item.url,
+                )
+                for item in explorer.documents
+            ],
+        )
+    finally:
+        session.close()
+
 
 @router.get("/runs/{run_id}/evidence",response_model=RunEvidenceResponse)
 def run_evidence(run_id:str):
