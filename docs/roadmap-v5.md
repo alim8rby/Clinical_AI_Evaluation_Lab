@@ -81,10 +81,16 @@ Empirical statistical results remain pending actual experiment execution.
 
 Empirical regression results remain pending actual experiment execution.
 
-## V5.8 — Evidence Explorer 2.0 — PLANNED
+## V5.8 — Evidence Explorer 2.0 — ENGINEERING COMPLETE
 - Full Question → Evidence → Claim → Citation → Chunk → Document inspection
-- Retrieved-but-unused evidence
-- Claim support inspection
+- Exact per-run retrieval traces
+- Retrieved-but-unused evidence detection
+- Claim-to-citation support inspection
+- Document provenance inspection
+- API and minimal frontend integration
+- V5.8 methodology and audit/freeze completed
+
+Historical runs created before V5.8 may not contain retrieval traces, so their original retrieved-but-unused evidence cannot be reconstructed with certainty.
 
 ## V5.9 — Reproducible Model Configuration — PLANNED
 - Explicit model, embedding, retriever, prompt, evaluator, and benchmark versions
