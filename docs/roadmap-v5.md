@@ -125,12 +125,19 @@ No evaluation semantics or frozen contracts were changed.
 
 No evaluation semantics or frozen contracts were changed.
 
-## V5.12 — V5 Audit & Freeze — PLANNED
+## V5.12 — V5 Audit & Freeze — ENGINEERING COMPLETE / FROZEN
 - Methodology audit
 - Reproducibility audit
 - Security and operational review
 - Documentation and limitation review
 - V5 freeze
+- Explicit non-production security boundaries documented
+
+See docs/methodology/v5.12-audit.md.
+
+## V5 Freeze
+
+V5 is frozen as an engineering evaluation platform. Further feature work requires a new scope decision.
 
 ## Explicit exclusions
 V5 does not add real patient data, autonomous clinical decisions, FHIR/EHR integration, multi-agent architecture, fine-tuning, Kubernetes, or additional clinical domains unless a later scope decision explicitly reopens them.
