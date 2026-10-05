@@ -301,7 +301,7 @@ def experiment_report(experiment_id:str):
             experiment_id=experiment.experiment_id,
             benchmark_version=experiment.config.benchmark_version,
             sample_count=repo.completed_run_count(experiment_id),
-            configuration={"model_config":experiment.config.model_config,"embedding_config":experiment.config.embedding_config,"retriever_config":experiment.config.retriever_config,"top_k":experiment.config.top_k,"prompt_version":experiment.config.prompt_version},
+            configuration={"model_config":experiment.config.model_config,"embedding_config":experiment.config.embedding_config,"retriever_config":experiment.config.retriever_config,"top_k":experiment.config.top_k,"prompt_version":experiment.config.prompt_version,"reproducibility":experiment.config.reproducibility_snapshot().as_dict()},
             metrics=repo.metric_averages(experiment_id),
             failures=failures,
         )
