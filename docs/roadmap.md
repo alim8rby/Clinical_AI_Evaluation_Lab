@@ -28,7 +28,7 @@ Completed: FastAPI implementation, PostgreSQL and pgvector, structured persisten
 
 See `docs/roadmap-v5.md`.
 
-Current phase: **V5.8 — Evidence Explorer 2.0 — NEXT**.
+Current phase: **V5.9 — Reproducible Model Configuration — NEXT**.
 
 V5.3–V5.7 evaluation-platform engineering phases are complete. Empirical results remain execution-dependent.
 
