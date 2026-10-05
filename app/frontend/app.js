@@ -47,6 +47,31 @@ async function loadFailureRegression(){
     target.innerHTML="<p>Threshold: "+(d.threshold*100).toFixed(1)+" percentage points</p><div class=metric-table><table><thead><tr><th>Category</th><th>Type</th><th>Baseline</th><th>Candidate</th><th>Delta</th><th>Signal</th></tr></thead><tbody>"+d.regressions.map(x=>"<tr><td>"+esc(x.category)+"</td><td>"+esc(x.failure_type)+"</td><td>"+(x.baseline_rate*100).toFixed(1)+"%</td><td>"+(x.candidate_rate*100).toFixed(1)+"%</td><td>"+(x.rate_difference*100).toFixed(1)+"pp</td><td>"+(x.regression?"Rate regression":"")+(x.question_level_regression?" Question-level regression":"")+"</td></tr>").join("")+"</tbody></table></div><p>"+flagged.length+" regression signal(s).</p>";
   }catch(e){target.textContent=e.message}
 }
+async function loadEvidenceExplorer(){
+  const runId=$("evidenceExplorerRunId").value.trim();
+  const target=$("evidenceExplorerResult");
+  if(!runId){toast("Enter a run ID");return}
+  target.className="detail";
+  target.textContent="Loading evidence trace…";
+  try{
+    const d=await api("/runs/"+encodeURIComponent(runId)+"/evidence/explorer");
+    const claims=d.claims||[];
+    const chunks=d.chunks||[];
+    const docs=d.documents||[];
+    target.innerHTML=
+      "<div class=trace><strong>Question</strong><p>"+esc(d.question||d.question_id)+"</p><strong>Answer</strong><p>"+esc(d.answer||"—")+"</p>"+
+      (d.uncertainty?"<strong>Uncertainty</strong><p>"+esc(d.uncertainty)+"</p>":"")+
+      "</div>"+
+      "<h3>Claims and citations</h3>"+
+      "<div class=trace-list>"+claims.map(c=>"<article class=detail-card><strong>Claim "+c.claim_index+"</strong><p>"+esc(c.text)+"</p><span>"+(c.citations.length?c.citations.map(x=>"Citation → "+esc(x.chunk_id)).join(" · "):"No citation")+"</span></article>").join("")+"</div>"+
+      "<h3>Retrieved evidence</h3>"+
+      "<div class=table-wrap><table><thead><tr><th>Rank</th><th>Chunk</th><th>Document</th><th>Score</th><th>Use</th></tr></thead><tbody>"+
+      chunks.map(c=>"<tr><td>"+c.rank+"</td><td>"+esc(c.chunk_id)+"</td><td>"+esc(c.document_id)+"</td><td>"+(c.score==null?"—":Number(c.score).toFixed(4))+"</td><td>"+(c.used_in_citation?"Cited":"Retrieved only")+"</td></tr>").join("")+
+      "</tbody></table></div>"+
+      "<h3>Documents</h3><div class=trace-list>"+docs.map(x=>"<article class=detail-card><strong>"+esc(x.title)+"</strong><p>"+esc(x.organization)+" · "+esc(x.source)+"</p><span>"+esc(x.document_id)+"</span></article>").join("")+"</div>";
+  }catch(e){target.className="detail error";target.textContent=e.message}
+}
+$("evidenceExplorerForm").onsubmit=e=>{e.preventDefault();loadEvidenceExplorer()};
 $("failureAnalyze").onclick=loadFailureAnalysis;
 $("failureRegressionForm").onsubmit=e=>{e.preventDefault();loadFailureRegression()};
 $("categoryFilter").onchange=renderFailures;$("severityFilter").onchange=renderFailures;loadOverview();
