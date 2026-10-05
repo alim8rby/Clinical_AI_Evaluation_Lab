@@ -107,6 +107,35 @@ def failure_experiment_analysis(experiment_id:str):
     finally:
         session.close()
 
+@router.get("/failures/experiments/{experiment_id}/rates",response_model=FailureRateListResponse)
+def failure_dimension_rates(
+    experiment_id:str,
+    dimension:str=Query(...,pattern="^(category|type|severity|difficulty|question_type)$"),
+):
+    session=services.session()
+    try:
+        runtime=services.runtime(session)
+        experiment=runtime.experiments.get(experiment_id)
+        if experiment is None:
+            raise HTTPException(status_code=404,detail="experiment not found")
+        rates=DatabaseFailureObservatoryV2(services.session).rates(experiment_id,dimension)
+        return FailureRateListResponse(
+            experiment_id=experiment_id,
+            rates=[
+                FailureRateResponse(
+                    dimension=item.dimension,
+                    value=item.value,
+                    failure_count=item.failure_count,
+                    unique_questions=item.unique_questions,
+                    question_count=item.question_count,
+                    failure_rate=item.failure_rate,
+                )
+                for item in rates
+            ],
+        )
+    finally:
+        session.close()
+
 @router.get("/failures/regression",response_model=FailureRegressionListResponse)
 def failure_regression(
     baseline_experiment_id:str,
