@@ -116,6 +116,11 @@ class ExperimentCreateRequest(BaseModel):
     top_k: int = Field(default=5, gt=0)
     prompt_version: str = Field(min_length=1)
     benchmark_version: str = Field(min_length=1)
+    model_version: str = "unspecified"
+    embedding_version: str = "unspecified"
+    retriever_version: str = "unspecified"
+    evaluator_versions: dict[str, str] = Field(default_factory=dict)
+    runtime_version: str = "caiel-runtime-v1"
 class ExperimentResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
     experiment_id: str
@@ -128,6 +133,8 @@ class ExperimentResponse(BaseModel):
     prompt_version: str
     benchmark_version: str
     created_at: str
+    reproducibility_snapshot: dict
+    reproducibility_hash: str
 
     @classmethod
     def from_domain(cls, e):
@@ -142,6 +149,8 @@ class ExperimentResponse(BaseModel):
             prompt_version=e.config.prompt_version,
             benchmark_version=e.config.benchmark_version,
             created_at=e.created_at.isoformat(),
+            reproducibility_snapshot=e.config.reproducibility_snapshot().as_dict(),
+            reproducibility_hash=e.config.reproducibility_snapshot().config_hash,
         )
 class RunRequest(BaseModel):
     question_id:str=Field(min_length=1); question:str=Field(min_length=1); domain:str="depression"; difficulty:str="easy"; expected_evidence:list[str]=Field(min_length=1); reference_answer:str=Field(min_length=1); key_concepts:list[str]=Field(min_length=1)
