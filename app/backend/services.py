@@ -110,7 +110,18 @@ class DatabaseFailureObservatoryV2:
         try:
             observatory, repository = self._build(session)
             count = repository.completed_question_count(experiment_id)
-            return observatory.for_experiment(experiment_id)._replace(completed_questions=count)
+            analysis = observatory.for_experiment(experiment_id)
+            return type(analysis)(
+                experiment_id=analysis.experiment_id,
+                total_failures=analysis.total_failures,
+                unique_questions=analysis.unique_questions,
+                completed_questions=count,
+                by_category=analysis.by_category,
+                by_type=analysis.by_type,
+                by_severity=analysis.by_severity,
+                by_difficulty=analysis.by_difficulty,
+                by_question_type=analysis.by_question_type,
+            )
         finally:
             session.close()
 
