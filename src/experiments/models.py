@@ -50,7 +50,7 @@ class Experiment:
     @staticmethod
     def create(name, description, config, *, created_at):
         if not name.strip(): raise ValueError("name must not be empty")
-        raw=json.dumps({"name":name,"description":description,"model_config":config.model_config,"embedding_config":config.embedding_config,"retriever_config":config.retriever_config,"top_k":config.top_k,"prompt_version":config.prompt_version,"benchmark_version":config.benchmark_version},sort_keys=True)
+        raw=json.dumps({"name":name,"description":description,"model_config":config.model_config,"embedding_config":config.embedding_config,"retriever_config":config.retriever_config,"top_k":config.top_k,"prompt_version":config.prompt_version,"benchmark_version":config.benchmark_version,"reproducibility":config.reproducibility_snapshot().canonical()},sort_keys=True)
         return Experiment("exp_"+hashlib.sha256(raw.encode()).hexdigest()[:16],name,description,config,created_at)
 
 @dataclass(frozen=True)
