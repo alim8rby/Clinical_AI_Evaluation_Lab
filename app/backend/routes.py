@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Query
 from app.backend.adapters import failure_response, list_failures, run_qa, summarize_failures
 from app.backend.repositories import EvaluationAnalysisRepository, RunEvidenceRepository, OperationalMetricsRepository
 from app.backend.schemas import *
-from app.backend.services import services
+from app.backend.services import services, DatabaseFailureObservatoryV2
 from src.evaluation.benchmark import BenchmarkQuestion
 from src.experiments.models import Experiment, ExperimentConfig
 from src.failure_analysis import FailureNotFoundError, FailureQuery
@@ -86,6 +86,70 @@ def failures(category:str|None=None,failure_type:str|None=None,severity:str|None
 @router.get("/failures/summary",response_model=FailureSummaryResponse)
 def failure_summary(category:str|None=None,failure_type:str|None=None,severity:str|None=None,run_id:str|None=None,question_id:str|None=None):
     return summarize_failures(services.observatory,FailureQuery(category=category,failure_type=failure_type,severity=severity,run_id=run_id,question_id=question_id))
+
+
+@router.get("/failures/experiments/{experiment_id}/analysis",response_model=FailureObservatoryResponse)
+def failure_experiment_analysis(experiment_id:str):
+    session=services.session()
+    try:
+        analysis=DatabaseFailureObservatoryV2(services.session).for_experiment(experiment_id)
+        return FailureObservatoryResponse(
+            experiment_id=analysis.experiment_id,
+            total_failures=analysis.total_failures,
+            unique_questions=analysis.unique_questions,
+            completed_questions=analysis.completed_questions or 0,
+            by_category=analysis.by_category,
+            by_type=analysis.by_type,
+            by_severity=analysis.by_severity,
+            by_difficulty=analysis.by_difficulty,
+            by_question_type=analysis.by_question_type,
+        )
+    finally:
+        session.close()
+
+@router.get("/failures/regression",response_model=FailureRegressionListResponse)
+def failure_regression(
+    baseline_experiment_id:str,
+    candidate_experiment_id:str,
+    threshold:float=Query(default=0.10,ge=0.0),
+):
+    session=services.session()
+    try:
+        runtime=services.runtime(session)
+        baseline=runtime.experiments.get(baseline_experiment_id)
+        candidate=runtime.experiments.get(candidate_experiment_id)
+        if baseline is None or candidate is None:
+            raise HTTPException(status_code=404,detail="experiment not found")
+        if baseline.config.benchmark_version != candidate.config.benchmark_version:
+            raise HTTPException(status_code=400,detail="experiments must use the same benchmark version")
+        if baseline_experiment_id == candidate_experiment_id:
+            raise HTTPException(status_code=400,detail="baseline and candidate experiments must differ")
+        regressions=DatabaseFailureObservatoryV2(services.session).regression(
+            baseline_experiment_id,candidate_experiment_id,threshold
+        )
+        return FailureRegressionListResponse(
+            baseline_experiment_id=baseline_experiment_id,
+            candidate_experiment_id=candidate_experiment_id,
+            threshold=threshold,
+            regressions=[
+                FailureRegressionResponse(
+                    category=item.category,
+                    failure_type=item.failure_type,
+                    baseline_rate=item.baseline_rate,
+                    candidate_rate=item.candidate_rate,
+                    rate_difference=item.rate_difference,
+                    baseline_questions=item.baseline_questions,
+                    candidate_questions=item.candidate_questions,
+                    regression=item.regression,
+                    baseline_affected_questions=item.baseline_affected_questions,
+                    candidate_affected_questions=item.candidate_affected_questions,
+                    question_level_regression=item.question_level_regression,
+                )
+                for item in regressions
+            ],
+        )
+    finally:
+        session.close()
 
 @router.get("/failures/{failure_id}",response_model=FailureResponse)
 def failure_detail(failure_id:str):
