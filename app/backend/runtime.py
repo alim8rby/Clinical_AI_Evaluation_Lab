@@ -14,7 +14,7 @@ from src.experiments.models import Experiment, ExperimentResult, RunRecord
 from src.failure_analysis.workflow import process_result
 from src.pipeline import ClinicalRAG
 
-from app.backend.repositories import AnswerRepository, CitationRepository, EvaluationRepository, ExperimentRepository, FailureRepository, RunRepository
+from app.backend.repositories import AnswerRepository, CitationRepository, EvaluationRepository, ExperimentRepository, FailureRepository, RetrievalTraceRepository, RunRepository
 from app.backend.observability import logger
 
 
@@ -66,6 +66,7 @@ class EvaluationRuntime:
             self.runs.save(result.run)
             self.answers.save(answer_id, run_id, rag_result.answer)
             self.citations.save_many(rag_result.citations)
+            RetrievalTraceRepository(self.runs.session).save_many(run_id, rag_result.evidence.evidence)
             self._save_evaluations(answer_id, retrieval, answer_eval, grounding, reliability)
             logger.info("run_completed", extra={"run_id": run_id, "experiment_id": experiment.experiment_id, "question_id": question.question_id, "latency_ms": run.latency_ms, "input_tokens": run.input_tokens, "output_tokens": run.output_tokens, "cost": run.cost})
             return RuntimeResult(experiment, result)
