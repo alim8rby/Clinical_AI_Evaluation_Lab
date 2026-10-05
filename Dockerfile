@@ -5,7 +5,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app \
-    APP_ENV=production \
+    APP_ENV=demo \
     APP_HOST=0.0.0.0 \
     APP_PORT=8000
 
@@ -14,7 +14,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p data
+RUN mkdir -p data && \
+    useradd --create-home --uid 10001 caiel && \
+    chown -R caiel:caiel /app
+
+USER caiel
 
 EXPOSE 8000
 
