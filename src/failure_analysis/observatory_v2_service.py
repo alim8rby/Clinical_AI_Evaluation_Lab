@@ -11,6 +11,7 @@ from src.failure_analysis.observatory_v2 import (
     ObservatoryAnalysis,
     analyze_experiment,
     compare_failure_rates,
+    dimension_rates,
     dimension_summary,
 )
 
@@ -39,6 +40,24 @@ class FailureObservatoryV2:
         return dimension_summary(
             failures,
             dimension=dimension,
+            question_metadata=self.question_metadata,
+        )
+
+    def rates(
+        self,
+        dimension: str,
+        *,
+        experiment_id: str,
+        question_count: int,
+    ):
+        failures = tuple(
+            failure for failure in self.failures
+            if self.run_to_experiment.get(failure.run_id) == experiment_id
+        )
+        return dimension_rates(
+            failures,
+            dimension=dimension,
+            question_count=question_count,
             question_metadata=self.question_metadata,
         )
 
