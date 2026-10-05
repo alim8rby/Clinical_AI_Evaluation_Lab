@@ -42,14 +42,18 @@ def run_batch(
     if not questions:
         raise ValueError("questions must not be empty")
 
+    question_ids = [getattr(question, "question_id", None) for question in questions]
+    if any(not question_id for question_id in question_ids):
+        raise ValueError("every question must expose question_id")
+    if len(question_ids) != len(set(question_ids)):
+        raise ValueError("question IDs must be unique within a batch")
+
     started = datetime.now(timezone.utc).replace(tzinfo=None)
     results: list[ExperimentResult] = []
     errors: list[dict] = []
 
     for question in questions:
-        question_id = getattr(question, "question_id", None)
-        if not question_id:
-            raise ValueError("every question must expose question_id")
+        question_id = question.question_id
         try:
             runtime_result = runner(experiment, question)
             result = getattr(runtime_result, "result", runtime_result)
