@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import PlainTextResponse
 from app.backend.adapters import failure_response, list_failures, run_qa, summarize_failures
 from app.backend.repositories import EvaluationAnalysisRepository, RunEvidenceRepository, OperationalMetricsRepository, RunEvidenceExplorerRepository
 from app.backend.schemas import *
@@ -8,6 +9,7 @@ from src.evaluation.benchmark import BenchmarkQuestion
 from src.experiments.models import Experiment, ExperimentConfig
 from src.failure_analysis import FailureNotFoundError, FailureQuery
 from app.backend.settings import settings
+from src.experiments.research_report import render_research_report
 
 router=APIRouter()
 
@@ -293,6 +295,20 @@ def run_evidence(run_id:str):
             answer_id=answer.answer_id if answer else None,
             evidence=[EvidenceResponse(chunk_id=c.chunk_id,document_id=c.document_id,score=None,rank=c.chunk_index+1,text=c.text) for c in chunks],
         )
+    finally: session.close()
+
+@router.get("/experiments/{experiment_id}/report/markdown",response_class=PlainTextResponse)
+def experiment_report_markdown(experiment_id:str):
+    session=services.session()
+    try:
+        runtime=services.runtime(session)
+        experiment=runtime.experiments.get(experiment_id)
+        if experiment is None: raise HTTPException(status_code=404,detail="experiment not found")
+        repo=EvaluationAnalysisRepository(session)
+        failures=[failure.to_dict() for failure in repo.failures_for_experiment(experiment_id)]
+        metrics=repo.metric_averages(experiment_id)
+        content=render_research_report(experiment=experiment,sample_count=repo.completed_run_count(experiment_id),metrics=metrics,failures=failures)
+        return PlainTextResponse(content,media_type="text/markdown")
     finally: session.close()
 
 @router.get("/experiments/{experiment_id}/report",response_model=ReportResponse)
