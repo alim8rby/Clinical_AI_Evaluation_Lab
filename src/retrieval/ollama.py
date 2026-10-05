@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 import httpx
 
 
@@ -8,13 +10,15 @@ class OllamaEmbeddingProvider:
 
     def __init__(
         self,
-        model: str = "nomic-embed-text",
-        base_url: str = "http://127.0.0.1:11434",
-        timeout: float = 30.0,
+        model: str | None = None,
+        base_url: str | None = None,
+        timeout: float | None = None,
     ):
-        self.model = model
-        self.base_url = base_url.rstrip("/")
-        self.timeout = timeout
+        self.model = model or os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text")
+        self.base_url = (
+            base_url or os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+        ).rstrip("/")
+        self.timeout = timeout or float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "30"))
         self._dimensions: int | None = None
 
     @property
