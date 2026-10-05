@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.backend.database import DATABASE_URL, SessionLocal
 from app.backend.runtime import EvaluationRuntime
 from src.evaluation.ollama_semantic import OllamaSemanticEvaluator
-from app.backend.repositories import ChunkEmbeddingRepository, ChunkRepository, DocumentRepository, FailureObservatoryRepository
+from app.backend.repositories import ChunkEmbeddingRepository, ChunkRepository, DocumentRepository, FailureObservatoryRepository, ExperimentRepository
 from src.failure_analysis.observatory_v2_service import FailureObservatoryV2
 from src.failure_analysis import FailureObservatory, FailureQuery
 from src.generation import OllamaGenerationProvider, build_citations
@@ -93,12 +93,9 @@ class DatabaseFailureObservatoryV2:
     def __init__(self, session_factory):
         self.session_factory = session_factory
 
-    def _build(self, session):
+    def _build(self, session, benchmark_version):
         repository = FailureObservatoryRepository(session)
-        root = Path(__file__).resolve().parents[2]
-        metadata = repository.question_metadata(
-            str(root / "data" / "benchmark" / "clinicalqa_v2.json")
-        )
+        metadata = repository.question_metadata(benchmark_version)
         return FailureObservatoryV2(
             tuple(repository.failures()),
             repository.run_to_experiment(),
@@ -108,7 +105,10 @@ class DatabaseFailureObservatoryV2:
     def for_experiment(self, experiment_id):
         session = self.session_factory()
         try:
-            observatory, repository = self._build(session)
+            experiment = ExperimentRepository(session).get(experiment_id)
+            if experiment is None:
+                raise ValueError("experiment not found")
+            observatory, repository = self._build(session, experiment.config.benchmark_version)
             count = repository.completed_question_count(experiment_id)
             analysis = observatory.for_experiment(experiment_id)
             return type(analysis)(
@@ -128,7 +128,10 @@ class DatabaseFailureObservatoryV2:
     def rates(self, experiment_id, dimension):
         session = self.session_factory()
         try:
-            observatory, repository = self._build(session)
+            experiment = ExperimentRepository(session).get(experiment_id)
+            if experiment is None:
+                raise ValueError("experiment not found")
+            observatory, repository = self._build(session, experiment.config.benchmark_version)
             return observatory.rates(
                 dimension,
                 experiment_id=experiment_id,
@@ -140,7 +143,10 @@ class DatabaseFailureObservatoryV2:
     def regression(self, baseline_experiment_id, candidate_experiment_id, threshold=0.10):
         session = self.session_factory()
         try:
-            observatory, repository = self._build(session)
+            candidate = ExperimentRepository(session).get(candidate_experiment_id)
+            if candidate is None:
+                raise ValueError("experiment not found")
+            observatory, repository = self._build(session, candidate.config.benchmark_version)
             return observatory.regression(
                 baseline_experiment_id,
                 candidate_experiment_id,
