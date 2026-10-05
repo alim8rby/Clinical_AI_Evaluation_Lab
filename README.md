@@ -158,12 +158,19 @@ The benchmark and evidence corpus are compact engineering datasets, and model-as
 
 ## Documentation
 
+- `docs/portfolio-demo.md` — 5-minute portfolio demo script
 - `docs/product-spec.md` — product definition
 - `docs/roadmap.md` — overall roadmap
-- `docs/roadmap-v5.md` — V5 roadmap
-- `docs/architecture/` — architecture and contracts
-- `docs/methodology/` — evaluation methodology and audits
+- `docs/roadmap-v5.md` — V5 roadmap and freeze
+- `docs/architecture/` — architecture, boundaries, and decisions
+- `docs/methodology/` — evaluation methodology and phase audits
 - `docs/methodology/v5.12-audit.md` — final V5 audit
+
+### Project status
+
+**V5 is frozen.** The current repository is a portfolio/research evaluation platform. New work should be treated as V6 scope rather than incremental V5 feature growth.
+
+The local demo is intentionally self-contained around Docker Compose + Ollama and uses a compact controlled benchmark/corpus. It is not a hosted production clinical service.
 
 ## Troubleshooting
 
