@@ -1,11 +1,14 @@
 from sqlalchemy import select
+from pathlib import Path
+import json
 from sqlalchemy.orm import Session
 
-from app.backend.db_models import AnswerRow, CitationRow, ChunkRow, DocumentRow, EvaluationRow, ExperimentRow, FailureRow, RunRow
+from app.backend.db_models import AnswerRow, CitationRow, ChunkRow, DocumentRow, EvaluationRow, ExperimentRow, FailureRow, RetrievalTraceRow, RunRow
 from src.failure_analysis.models import Failure, FailureSeverity
 from src.ingestion.models import SourceDocument
 from src.preprocessing.models import Chunk
 from src.experiments.models import Experiment, ExperimentConfig, RunRecord
+from src.evidence_explorer import ExplorerCitation, ExplorerChunk, ExplorerDocument, build_explorer
 
 class FailureRepository:
     def __init__(self, session: Session): self.session = session
@@ -94,6 +97,134 @@ class CitationRepository:
     def save_many(self,citations):
         for c in citations:self.session.merge(CitationRow(citation_id=c.citation_id,answer_id=c.answer_id,claim_index=c.claim_index,chunk_id=c.chunk_id,citation_text=c.citation_text))
         self.session.commit()
+
+class RetrievalTraceRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def save_many(self, run_id, evidence):
+        for item in evidence:
+            raw_id = f"{run_id}:{item.rank}:{item.chunk.chunk_id}"
+            import hashlib
+            retrieval_id = "retrieval_" + hashlib.sha256(raw_id.encode()).hexdigest()[:24]
+            self.session.merge(
+                RetrievalTraceRow(
+                    retrieval_id=retrieval_id,
+                    run_id=run_id,
+                    chunk_id=item.chunk.chunk_id,
+                    rank=item.rank,
+                    score=item.score,
+                )
+            )
+        self.session.commit()
+
+
+class RunEvidenceExplorerRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def get(self, run_id: str, benchmark_version: str):
+        run = self.session.get(RunRow, run_id)
+        if run is None:
+            return None
+
+        answer = self.session.scalars(
+            select(AnswerRow).where(AnswerRow.run_id == run_id)
+        ).first()
+        citations = []
+        if answer is not None:
+            citations = self.session.scalars(
+                select(CitationRow)
+                .where(CitationRow.answer_id == answer.answer_id)
+                .order_by(CitationRow.claim_index, CitationRow.citation_id)
+            ).all()
+
+        traces = self.session.scalars(
+            select(RetrievalTraceRow)
+            .where(RetrievalTraceRow.run_id == run_id)
+            .order_by(RetrievalTraceRow.rank, RetrievalTraceRow.chunk_id)
+        ).all()
+
+        chunk_ids = {row.chunk_id for row in traces} | {row.chunk_id for row in citations}
+        chunk_rows = {
+            row.chunk_id: row
+            for row in self.session.scalars(
+                select(ChunkRow).where(ChunkRow.chunk_id.in_(sorted(chunk_ids)))
+            ).all()
+        }
+        document_ids = {row.document_id for row in chunk_rows.values()}
+        document_rows = {
+            row.document_id: row
+            for row in self.session.scalars(
+                select(DocumentRow).where(DocumentRow.document_id.in_(sorted(document_ids)))
+            ).all()
+        }
+
+        metadata_path = (
+            Path(__file__).resolve().parents[2]
+            / "data"
+            / "benchmark"
+            / f"{benchmark_version.lower().replace('-', '_')}.json"
+        )
+        question = None
+        if metadata_path.exists():
+            payload = json.loads(metadata_path.read_text(encoding="utf-8"))
+            question = next(
+                (item.get("question") for item in payload if item.get("question_id") == run.question_id),
+                None,
+            )
+
+        rank_by_chunk = {row.chunk_id: row for row in traces}
+        explorer_chunks = []
+        for chunk_id in sorted(chunk_rows):
+            chunk = chunk_rows[chunk_id]
+            trace = rank_by_chunk.get(chunk_id)
+            explorer_chunks.append(
+                ExplorerChunk(
+                    chunk_id=chunk.chunk_id,
+                    document_id=chunk.document_id,
+                    text=chunk.text,
+                    section=chunk.section,
+                    page=chunk.page,
+                    rank=trace.rank if trace else 0,
+                    score=trace.score if trace else None,
+                    used_in_citation=any(c.chunk_id == chunk_id for c in citations),
+                )
+            )
+
+        explorer_documents = [
+            ExplorerDocument(
+                document_id=row.document_id,
+                title=row.title,
+                source=row.source,
+                organization=row.organization,
+                publication_date=row.publication_date.isoformat() if row.publication_date else None,
+                url=row.url,
+            )
+            for row in document_rows.values()
+        ]
+        explorer_citations = [
+            ExplorerCitation(
+                citation_id=row.citation_id,
+                claim_index=row.claim_index,
+                chunk_id=row.chunk_id,
+                citation_text=row.citation_text,
+            )
+            for row in citations
+        ]
+        return build_explorer(
+            run_id=run.run_id,
+            question_id=run.question_id,
+            question=question,
+            answer_id=answer.answer_id if answer else None,
+            answer_text=answer.answer_text if answer else None,
+            uncertainty=answer.uncertainty if answer else None,
+            raw_claims=answer.claims if answer else [],
+            citations=explorer_citations,
+            chunks=explorer_chunks,
+            documents=explorer_documents,
+        )
+
 
 class EvaluationRepository:
     def __init__(self,session): self.session=session
