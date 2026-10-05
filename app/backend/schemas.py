@@ -26,6 +26,10 @@ class FailureRateResponse(BaseModel):
     question_count:int
     failure_rate:float
 
+class FailureRateListResponse(BaseModel):
+    experiment_id:str
+    rates:list[FailureRateResponse]
+
 class FailureRegressionResponse(BaseModel):
     category:str
     failure_type:str
