@@ -125,6 +125,18 @@ class DatabaseFailureObservatoryV2:
         finally:
             session.close()
 
+    def rates(self, experiment_id, dimension):
+        session = self.session_factory()
+        try:
+            observatory, repository = self._build(session)
+            return observatory.rates(
+                dimension,
+                experiment_id=experiment_id,
+                question_count=repository.completed_question_count(experiment_id),
+            )
+        finally:
+            session.close()
+
     def regression(self, baseline_experiment_id, candidate_experiment_id, threshold=0.10):
         session = self.session_factory()
         try:
