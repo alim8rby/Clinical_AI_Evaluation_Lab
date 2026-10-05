@@ -115,10 +115,15 @@ No evaluation semantics or frozen contracts were changed.
 - Comparison views
 - Failure investigation workflow
 
-## V5.11 — Research Reports — PLANNED
-- Durable experiment reports
+## V5.11 — Research Reports — ENGINEERING COMPLETE
+- Deterministic Markdown research-report renderer
+- Reproducibility and configuration provenance
+- Aggregate metric and failure summaries
 - Methodology and limitation summaries
-- Reproducible result artifacts
+- Dedicated Markdown report API
+- V5.11 methodology and audit/freeze completed
+
+No evaluation semantics or frozen contracts were changed.
 
 ## V5.12 — V5 Audit & Freeze — PLANNED
 - Methodology audit
