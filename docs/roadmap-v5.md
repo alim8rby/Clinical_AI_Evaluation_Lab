@@ -54,11 +54,17 @@ Empirical model-performance results remain pending an executed controlled benchm
 
 Empirical benchmark runs remain pending actual execution.
 
-## V5.6 — Statistical Evaluation — PLANNED
+## V5.6 — Statistical Evaluation — ENGINEERING COMPLETE
 - Question-level paired comparisons
-- Confidence intervals
-- Effect sizes and uncertainty-aware reporting
+- Deterministic bootstrap confidence intervals
+- Paired standardized effect sizes
+- Experiment-level statistical comparison reports
+- Explicit uncertainty-aware interpretation
 - No hidden composite quality score
+- No clinical-superiority claim
+- Methodology and audit completed
+
+Empirical statistical results remain pending actual experiment execution.
 
 ## V5.7 — Failure Observatory 2.0 — PLANNED
 - Failure trends by experiment, model, difficulty, and question type
