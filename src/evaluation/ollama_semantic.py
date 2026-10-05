@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import httpx
 
 
@@ -10,13 +11,15 @@ class OllamaSemanticEvaluator:
 
     def __init__(
         self,
-        model: str = "llama3.2:3b",
-        base_url: str = "http://127.0.0.1:11434",
-        timeout: float = 60.0,
+        model: str | None = None,
+        base_url: str | None = None,
+        timeout: float | None = None,
     ):
-        self.model = model
-        self.base_url = base_url.rstrip("/")
-        self.timeout = timeout
+        self.model = model or os.getenv("OLLAMA_GENERATION_MODEL", "llama3.2:3b")
+        self.base_url = (
+            base_url or os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+        ).rstrip("/")
+        self.timeout = timeout or float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "60"))
 
     def _generate_json(self, prompt: str) -> dict:
         try:
