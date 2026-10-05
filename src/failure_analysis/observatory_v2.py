@@ -25,6 +25,7 @@ class FailureRegression:
     rate_difference: float
     baseline_questions: int
     candidate_questions: int
+    regression: bool
 
 
 @dataclass(frozen=True)
@@ -125,9 +126,12 @@ def compare_failure_rates(
     *,
     baseline_question_count: int,
     candidate_question_count: int,
+    regression_threshold: float = 0.10,
 ) -> tuple[FailureRegression, ...]:
     if baseline_question_count <= 0 or candidate_question_count <= 0:
         raise ValueError("question counts must be greater than zero")
+    if regression_threshold < 0:
+        raise ValueError("regression_threshold must not be negative")
 
     baseline = Counter((failure.category, failure.type) for failure in baseline_failures)
     candidate = Counter((failure.category, failure.type) for failure in candidate_failures)
@@ -145,6 +149,10 @@ def compare_failure_rates(
             ),
             baseline_questions=baseline_question_count,
             candidate_questions=candidate_question_count,
+            regression=(
+                candidate[(category, failure_type)] / candidate_question_count
+                - baseline[(category, failure_type)] / baseline_question_count
+            ) >= regression_threshold,
         )
         for category, failure_type in keys
     )
