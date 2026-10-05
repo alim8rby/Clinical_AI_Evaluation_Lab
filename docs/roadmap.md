@@ -24,13 +24,13 @@ V3 severity is a deterministic triage signal, not a validated clinical risk scor
 
 Completed: FastAPI implementation, PostgreSQL and pgvector, structured persistence, semantic embeddings, semantic answer/grounding evaluation, expanded benchmark, retrieval challenge set, failure classifier v2, observability, frontend, containers, CI/CD, and final hardening audit.
 
-## V5 — Evaluation Platform — IN PROGRESS
+## V5 — Evaluation Platform — FROZEN
 
 See `docs/roadmap-v5.md`.
 
-Current phase: **V5.12 — Portfolio Hardening — NEXT**.
+Current status: **V5.12 — V5 Audit & Freeze — ENGINEERING COMPLETE / FROZEN**.
 
-V5.10 Platform UX and V5.11 Research Reports are engineering complete and frozen.
+V5.10 Platform UX and V5.11 Research Reports are engineering complete and frozen. V5.12 completes the V5 methodology, reproducibility, security/operations, and documentation audit.
 
 V5.10 platform UX is engineering complete and frozen. Empirical results remain execution-dependent.
 
