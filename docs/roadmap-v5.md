@@ -43,10 +43,16 @@ Empirical benchmark runs remain environment-dependent and should not be represen
 
 Empirical model-performance results remain pending an executed controlled benchmark run.
 
-## V5.5 — Experiment Engine — PLANNED
-- Reproducible batch benchmark runs
-- Experiment configuration capture
-- Aggregate results and failure retention
+## V5.5 — Experiment Engine — ENGINEERING COMPLETE
+- Reproducible sequential batch benchmark runs
+- Experiment configuration snapshots
+- Continue-on-error and explicit stop-on-error modes
+- Question-level result and execution-error retention
+- Aggregate evaluation reports
+- Existing failure retention preserved
+- Methodology and audit completed
+
+Empirical benchmark runs remain pending actual execution.
 
 ## V5.6 — Statistical Evaluation — PLANNED
 - Question-level paired comparisons
