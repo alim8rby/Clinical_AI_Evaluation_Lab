@@ -11,6 +11,51 @@ class FailureResponse(BaseModel):
     failure_id:str; run_id:str; question_id:str; category:str; type:str; severity:str; description:str; evidence:str; answer_id:str|None=None; metric:str|None=None; metric_value:float|None=None; classifier_version:str; created_at:str|None=None
 class FailureListResponse(BaseModel): failures:list[FailureResponse]
 class FailureSummaryResponse(BaseModel): total:int; by_category:dict[str,int]; by_type:dict[str,int]; by_severity:dict[str,int]
+
+class FailureDimensionResponse(BaseModel):
+    dimension:str
+    value:str
+    failure_count:int
+    unique_questions:int
+
+class FailureRateResponse(BaseModel):
+    dimension:str
+    value:str
+    failure_count:int
+    unique_questions:int
+    question_count:int
+    failure_rate:float
+
+class FailureRegressionResponse(BaseModel):
+    category:str
+    failure_type:str
+    baseline_rate:float
+    candidate_rate:float
+    rate_difference:float
+    baseline_questions:int
+    candidate_questions:int
+    regression:bool
+    baseline_affected_questions:int
+    candidate_affected_questions:int
+    question_level_regression:bool
+
+class FailureObservatoryResponse(BaseModel):
+    experiment_id:str
+    total_failures:int
+    unique_questions:int
+    completed_questions:int
+    by_category:dict[str,int]
+    by_type:dict[str,int]
+    by_severity:dict[str,int]
+    by_difficulty:dict[str,int]
+    by_question_type:dict[str,int]
+
+class FailureRegressionListResponse(BaseModel):
+    baseline_experiment_id:str
+    candidate_experiment_id:str
+    threshold:float
+    regressions:list[FailureRegressionResponse]
+
 class ExperimentCreateRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
     name: str = Field(min_length=1)
