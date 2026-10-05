@@ -8,9 +8,9 @@ The goal is not just to make a medical chatbot. The goal is to see **where an AI
 
 ## Current status
 
-**V5.11 — Research Reports: ENGINEERING COMPLETE**
+**V5 — Evaluation Platform: FROZEN**
 
-V0 architecture and V1 RAG are also frozen. The repository now has a complete local RAG baseline, deterministic evaluation layer, local failure-analysis observatory, and durable research-report artifacts.
+V0 architecture and V1 RAG are also frozen. V5.1–V5.12 are engineering complete, with the final V5 audit documenting reproducibility, operational boundaries, and non-production security constraints.
 
 ### What is built
 
@@ -83,9 +83,9 @@ V4.0–V4.15 is frozen. The application has a FastAPI boundary, PostgreSQL persi
 
 ### V5 — Evaluation Platform
 
-V5.1 engineering is frozen with a human-calibration framework and explicit annotation rubric. V5.2 is frozen with a 60-question ClinicalQA-v2 benchmark while preserving ClinicalQA-v1 as an immutable baseline. V5.3 adds controlled dense, BM25, and hybrid retrieval comparisons. V5.4 adds controlled generation-provider evaluation with quality, grounding, reliability, latency, token, and cost metrics. V5.5 adds reproducible batch experiment execution, configuration capture, aggregate reporting, and failure retention. V5.6 adds paired statistical comparisons, deterministic bootstrap confidence intervals, and effect-size reporting. V5.7 adds experiment-aware failure trends, denominator-aware rates, benchmark-aware enrichment, and regression signals without changing the frozen failure schema. V5.8 adds end-to-end evidence tracing, exact per-run retrieval traces, retrieved-but-unused evidence detection, and document provenance inspection. V5.9 adds explicit versioned experiment configuration, canonical reproducibility hashes, and write-once configuration snapshots. V5.10 adds experiment discovery, selection, metric exploration, and comparison workflow improvements over the existing evaluation APIs.
+V5.1 engineering is frozen with a human-calibration framework and explicit annotation rubric. V5.2 is frozen with a 60-question ClinicalQA-v2 benchmark while preserving ClinicalQA-v1 as an immutable baseline. V5.3 adds controlled dense, BM25, and hybrid retrieval comparisons. V5.4 adds controlled generation-provider evaluation with quality, grounding, reliability, latency, token, and cost metrics. V5.5 adds reproducible batch experiment execution, configuration capture, aggregate reporting, and failure retention. V5.6 adds paired statistical comparisons, deterministic bootstrap confidence intervals, and effect-size reporting. V5.7 adds experiment-aware failure trends, denominator-aware rates, benchmark-aware enrichment, and regression signals without changing the frozen failure schema. V5.8 adds end-to-end evidence tracing, exact per-run retrieval traces, retrieved-but-unused evidence detection, and document provenance inspection. V5.9 adds explicit versioned experiment configuration, canonical reproducibility hashes, and write-once configuration snapshots. V5.10 adds experiment discovery, selection, metric exploration, and comparison workflow improvements over the existing evaluation APIs. V5.11 adds deterministic Markdown research reports. V5.12 freezes V5 after methodology, reproducibility, security/operations, and documentation audit.
 
-See docs/methodology/v5.1-calibration.md, docs/methodology/v5.1-annotation-rubric.md, docs/methodology/v5.1-audit.md, docs/methodology/v5.2-benchmark.md, and docs/methodology/v5.2-audit.md, and docs/methodology/v5.3-retrieval-research.md, docs/methodology/v5.8-evidence-explorer.md, docs/methodology/v5.8-audit.md, docs/methodology/v5.9-reproducibility.md, and docs/methodology/v5.9-audit.md, and docs/methodology/v5.10-platform-ux.md, docs/methodology/v5.10-audit.md, docs/methodology/v5.11-research-reports.md, and docs/methodology/v5.11-audit.md.
+See the V5 methodology and audit records in docs/methodology/, including docs/methodology/v5.11-research-reports.md, docs/methodology/v5.11-audit.md, and docs/methodology/v5.12-audit.md.
 
 ## Important limitations
 
@@ -97,6 +97,8 @@ See docs/methodology/v5.1-calibration.md, docs/methodology/v5.1-annotation-rubri
 - No real patient data or autonomous clinical decision-making.
 - The PostgreSQL runtime now uses Ollama semantic embeddings; the deterministic 256-dimensional provider remains available as a compatibility baseline.
 - No clinical validation is claimed.
+- The API has no authentication, authorization, rate limiting, or production ingress controls; it is intended for local/portfolio use only.
+- Docker Compose exposes development ports and the API container is not a production-hardened deployment.
 
 ## Documentation
 
@@ -116,6 +118,7 @@ See docs/methodology/v5.1-calibration.md, docs/methodology/v5.1-annotation-rubri
 - docs/methodology/v5.1-annotation-rubric.md — human review rubric
 - docs/methodology/v5.1-audit.md — V5.1 freeze record
 - docs/roadmap-v5.md — V5 evaluation platform roadmap
+- docs/methodology/v5.12-audit.md — V5 final audit and freeze record
 
 ## Tech direction
 
