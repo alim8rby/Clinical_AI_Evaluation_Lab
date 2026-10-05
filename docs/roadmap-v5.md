@@ -102,7 +102,14 @@ Historical runs created before V5.8 may not contain retrieval traces, so their o
 
 Empirical bit-for-bit reproducibility is not claimed; provider nondeterminism can remain.
 
-## V5.10 — Platform UX — PLANNED
+## V5.10 — Platform UX — ENGINEERING COMPLETE
+- Experiment discovery and selection workflow
+- Aggregate metric exploration from existing reports
+- Comparison workflow prefilled from selected experiment
+- Existing Failure Observatory and Evidence Explorer navigation preserved
+- V5.10 methodology and audit/freeze completed
+
+No evaluation semantics or frozen contracts were changed.
 - Experiment workflow
 - Metric exploration
 - Comparison views
