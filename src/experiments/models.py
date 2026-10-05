@@ -12,10 +12,33 @@ class ExperimentConfig:
     top_k: int
     prompt_version: str
     benchmark_version: str
+    model_version: str = "unspecified"
+    embedding_version: str = "unspecified"
+    retriever_version: str = "unspecified"
+    evaluator_versions: dict[str, str] | None = None
+    runtime_version: str = "caiel-runtime-v1"
     def __post_init__(self):
         if self.top_k <= 0: raise ValueError("top_k must be greater than zero")
         if not self.prompt_version.strip(): raise ValueError("prompt_version must not be empty")
         if not self.benchmark_version.strip(): raise ValueError("benchmark_version must not be empty")
+        for name, value in (("model_version", self.model_version), ("embedding_version", self.embedding_version), ("retriever_version", self.retriever_version), ("runtime_version", self.runtime_version)):
+            if not str(value).strip(): raise ValueError(f"{name} must not be empty")
+        if self.evaluator_versions is not None:
+            for key, value in self.evaluator_versions.items():
+                if not str(key).strip() or not str(value).strip(): raise ValueError("evaluator_versions must contain non-empty names and versions")
+
+    def reproducibility_snapshot(self):
+        from src.experiments.reproducibility import ReproducibilitySnapshot
+        return ReproducibilitySnapshot(
+            schema_version="v5.9",
+            model_version=self.model_version,
+            embedding_version=self.embedding_version,
+            retriever_version=self.retriever_version,
+            prompt_version=self.prompt_version,
+            evaluator_versions=dict(self.evaluator_versions or {}),
+            benchmark_version=self.benchmark_version,
+            runtime_version=self.runtime_version,
+        )
 
 @dataclass(frozen=True)
 class Experiment:
